@@ -1,4 +1,6 @@
 # BattleShip
+// Author Etienne Mettaz
+// Begin of project : 20. June 2020
 
 BattleShip is a project from my free time, to build a game from my own. My goal is to implement an App for smartphone. 
 
