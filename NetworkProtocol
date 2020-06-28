@@ -1,0 +1,45 @@
+// NetworkProtocol for BattleShip
+// Date : 28.06.2020
+
+From Client to Server :
+
+    "READY A1S B1S C1E C2E C3E"
+        When all boats are set, Client send the position of his boats
+
+
+    "ATEMP A1"
+        Attempt, with one letter and one number for the Tile (column / line)
+
+    "LAUNC MISS"
+        Result of an attempt : MISS or TOUCH
+
+    "TOCOL 0"
+        Touché-coulé : Tell the server when one boat has drown.
+        Number is the index of the boat in SetOfBoats.names
+
+    "LOSTG "
+        Tell the server this player has lost the game
+
+__________________________________________________
+
+From Server to Client :
+
+
+    "START A5S B1E J4S G6E"
+        Announce the players the game can start, with the position of each
+        boat of the opponent, S E as direction (not to be shown)
+
+    "ATEMP A1"
+        Attempt from the other player.
+        One letter and one number for the Tile (column / line)
+
+
+    "LAUNC MISS"
+        Result of an attempt : MISS or TOUCH
+
+
+    "TOCOL 3"
+        Tell the player that he sank one of its opponent's boat
+
+    "WINNE "
+        Announce that the player has won
