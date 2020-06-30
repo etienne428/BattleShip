@@ -7,11 +7,6 @@ import clientSide.Client;
 import javax.swing.*;
 
 public class Tile extends JButton {
-    public static final int SETBOATFIRST = 0;
-    public static final int SETBOATSECOND = 1;
-    public static final int PLAY = 2;
-
-    private static int gameStatus;
 
     private final Client client;
     private final WaterGrid wg;
@@ -25,7 +20,6 @@ public class Tile extends JButton {
         this.wg = wg;
         this.line = line;
         this.column = column;
-        gameStatus = SETBOATFIRST;
         //setMinimumSize(new Dimension(80, 40));
         if (!myGrid && value == TileState.BOAT) {
             setText(String.valueOf(TileState.SEE));
@@ -35,22 +29,18 @@ public class Tile extends JButton {
         addActionListener(e -> attempt());
     }
 
-    public static void setPlaying() {
-        gameStatus = PLAY;
-    }
 
     private void attempt() {
+        int gameStatus = wg.getGameStatus();
         switch (gameStatus) {
-            case SETBOATFIRST:
+            case WaterGrid.SETBOATFIRST:
                 wg.setBeginOfNextBoat(this);
                 //System.out.println("Boat set from " + line + column);
-                gameStatus = SETBOATSECOND;
                 break;
-            case SETBOATSECOND:
+            case WaterGrid.SETBOATSECOND:
                 wg.addBoatFromTile(this);
-                gameStatus = SETBOATFIRST;
                 break;
-            case PLAY:
+            case WaterGrid.PLAY:
                 client.sendMessage("ATEMP " + line + column);
                 wg.setAttempt(this);
                 break;
@@ -81,9 +71,6 @@ public class Tile extends JButton {
         setText(String.valueOf(value.getDescription()));
         System.out.println(value.name());
         return String.valueOf(value.getDescription());
-    }
-    public static void setStatus(int status) {
-        gameStatus = status;
     }
 
     public void isEmpty() throws BoatNotSetException {

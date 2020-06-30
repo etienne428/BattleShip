@@ -32,9 +32,11 @@ public class GameFrame extends JFrame implements Runnable {
         add(myGrid);
         pack();
         setVisible(true);
+        setBoatOnDefault();
     }
 
     void setBoatOnDefault() {
+        opponentGrid = new WaterGrid(client, this, false);
         for (int i = 0; i < 5; i++) {
             boolean northSouth = random.nextBoolean();
             int line;
@@ -57,6 +59,24 @@ public class GameFrame extends JFrame implements Runnable {
             }
         }
         myGrid.printBoard();
+        setStartView();
+    }
+
+    private void setStartView() {
+        remove(myGrid);
+        myGrid.startGame();
+        add(opponentGrid);
+        JPanel myPanel = new JPanel();
+        myPanel.setLayout(new BorderLayout());
+        myPanel.setMaximumSize(new Dimension(500, 300));
+        myGrid.setMaximumSize(new Dimension(300, 300));
+        myPanel.add(myGrid, BorderLayout.LINE_START);
+
+        text = new JTextArea();
+        //text.setFont(Font.getFont(""));
+        text.append("Choose a tile to target");
+        myPanel.add(text, BorderLayout.LINE_END);
+        add(myPanel);
     }
 
     public void attempt(String s) {
@@ -85,19 +105,7 @@ public class GameFrame extends JFrame implements Runnable {
                 e.printStackTrace();
             }
         }
-        remove(myGrid);
-        add(opponentGrid);
-        JPanel myPanel = new JPanel();
-        myPanel.setLayout(new BorderLayout());
-        myPanel.setMaximumSize(new Dimension(500, 300));
-        myGrid.setMaximumSize(new Dimension(300, 300));
-        myPanel.add(myGrid, BorderLayout.LINE_START);
-
-        text = new JTextArea();
-        text.setFont(Font.getFont(""));
-        text.append("Choose a tile to target");
-        myPanel.add(text, BorderLayout.LINE_END);
-        add(myPanel);
+        setStartView();
     }
 
     public void resultOfAttempt(String s) {
@@ -109,5 +117,9 @@ public class GameFrame extends JFrame implements Runnable {
         if (opponentGrid != null) {
             opponentGrid.printBoard();
         }
+    }
+
+    public void setText(String t) {
+        text.append(t);
     }
 }

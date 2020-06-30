@@ -1,6 +1,7 @@
 import clientSide.Client;
-import serverSide.Game.Game;
 import serverSide.Server;
+import serverSide.Server1Player;
+import serverSide.Server2Player;
 
 import java.io.IOException;
 import java.net.BindException;
@@ -10,7 +11,7 @@ public class BSMain {
 
     private static boolean setServer(int port) {
         try {
-            server = new Server(port);
+            server = new Server2Player(port);
         } catch (BindException e) {
             e.printStackTrace();
             return false;
@@ -21,15 +22,24 @@ public class BSMain {
     }
 
     public static void main(String[] args) {
+
+        // default 1 just for now
+        int numberOfPlayer = 1;
         int port;
         if (args.length != 0) {
             port = Integer.parseInt(args[0]);
         } else {
             port = 42824;
         }
-        if (setServer(port)) {
+        if (numberOfPlayer == 1) {
+            server = new Server1Player(port);
             Thread serverThread = new Thread(server);
             serverThread.start();
+        } else if (numberOfPlayer == 2) {
+            if (setServer(port)) {
+                Thread serverThread = new Thread(server);
+                serverThread.start();
+            }
         }
         try {
             //server.runServer();

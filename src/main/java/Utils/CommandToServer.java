@@ -3,27 +3,27 @@ package Utils;
 public enum CommandToServer {
 
     // When all boats are set
-    READY("Ready"),
+    READY(),
 
     // Attempt, with one letter and one number for the Tile
     // ATEMP A 1
-    ATEMP("Attempt"),
+    ATEMP(),
 
     // Result of an attempt : MISS or TOUCH
     // LAUNC MISS
-    LAUNC("Launch"),
+    LAUNC(),
 
     // Sank boat
     // TOCO
-    TOCOL("TouchéCoulé"),
+    TOCOL(),
 
     // Announce the player has lost
-    LOSTG("Lost"),
+    LOSTG(),
 
     // Print both boards (debugging purpose)
-    PRINT("Print")
+    PRINT()
     ;
 
-    CommandToServer(String NAME) {
+    CommandToServer() {
     }
 }

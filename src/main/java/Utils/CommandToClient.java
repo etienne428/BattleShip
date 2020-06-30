@@ -5,28 +5,28 @@ public enum CommandToClient {
 
     // Attempt, with one letter and one number for the Tile
     // ATEMP A 1
-    ATEMP("Attempt"),
+    ATEMP(),
 
     // Announce the players the game can start, with the position of each
     // boat of the opponent, S E as direction
     // START A5S B1E J4S G6E
-    START("Start"),
+    START(),
 
     // Result of an attempt : MISS or TOUCH
     // LAUNC MISS
-    LAUNC("Launch"),
+    LAUNC(),
 
     // Sank boat
     // TOCO
-    TOCOL("TouchéCoulé"),
+    TOCOL(),
 
     // Announce the player has won
-    WINNE("Winner"),
+    WINNE(),
 
     // Print both boards (debugging purpose)
-    PRINT("Print")
+    PRINT()
     ;
 
-    CommandToClient(String NAME) {
+    CommandToClient() {
     }
 }

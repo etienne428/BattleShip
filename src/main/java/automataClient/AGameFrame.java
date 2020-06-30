@@ -2,16 +2,12 @@ package automataClient;
 
 import Boat.SetOfBoats;
 import Utils.BoatNotSetException;
-import Utils.Parser;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.Random;
 
 public class AGameFrame implements Runnable {
 
     private final AClient client;
-    private String name;
     private AWaterGrid myGrid;
     private AWaterGrid opponentGrid;
     private final Random random = new Random();

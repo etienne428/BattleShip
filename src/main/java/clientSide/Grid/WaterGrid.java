@@ -82,19 +82,20 @@ public class WaterGrid extends JPanel {
             return;
         }
         try {
-            addBoat(nextBoat.getLine(), nextBoat.getColumn(), setOfBoat.getLengths()[boatToAdd], northSouth);
+            addBoat(nextBoat.getLine(), nextBoat.getColumn(), SetOfBoats.getLengths()[boatToAdd], northSouth);
             boatToAdd++;
             if (boatToAdd == setOfBoat.numberOfBoats()) {
-                Tile.setPlaying();
+                gameStatus = PLAY;
                 client.sendMessage("READY");
             }
         } catch (BoatNotSetException e) {
             System.out.println(e.getMessage());
         }
+        gameStatus = SETBOATFIRST;
     }
 
     public void startGame() {
-        Tile.setPlaying();
+        gameStatus = PLAY;
         for (Tile t: grid) {
             t.setEnabled(false);
         }
@@ -123,7 +124,7 @@ public class WaterGrid extends JPanel {
         } else {
             tilesToJump = 1;
             if (c + length - 1 > 9) {
-                Tile.setStatus(Tile.SETBOATFIRST);
+                gameStatus = SETBOATFIRST;
                 throw new BoatNotSetException(c + " " + c+length + " isn't okay 22");
             }
         }
@@ -197,18 +198,19 @@ public class WaterGrid extends JPanel {
     }
 
     public void setBeginOfNextBoat(Tile tile) {
+        gameStatus = SETBOATSECOND;
         nextBoat = tile;
     }
 
     public void attempt(String s) {
-        s.replace(" ", "");
+        s = s.replace(" ", "");
         s = s.toUpperCase();
         if (s.length() != 2) {
             System.out.println("Wrong parsing of Tile : " + s);
         }
         System.out.println(s + " should be a letter and a number without space");
         int line = ((int) s.charAt(0)) - 65;
-        int column = Integer.valueOf(s.charAt(1));
+        int column = s.charAt(1);
         String message = grid[getPointIndex(line, column)].action();
         client.sendMessage("LAUNC " + message);
     }
@@ -219,5 +221,9 @@ public class WaterGrid extends JPanel {
 
     public void setAttempt(Tile tile) {
         lastAttempt = tile;
+    }
+
+    public int getGameStatus() {
+        return gameStatus;
     }
 }

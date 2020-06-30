@@ -9,19 +9,16 @@ import serverSide.ClientControl;
 public class AClient {
 
     private final AGameFrame gameFrame = new AGameFrame(this);
-    private final Thread GRAPHIC = new Thread(gameFrame);
     private final ClientControl clientControl;
 
     public AClient(ClientControl cc) {
         clientControl = cc;
+        Thread GRAPHIC = new Thread(gameFrame);
         GRAPHIC.start();
 
         //serverListener.start();
         System.out.println("Client running");
         gameFrame.launch();
-    }
-
-    public static void quit() {
     }
 
     public void performAction(String s) {

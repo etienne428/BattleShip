@@ -1,11 +1,11 @@
 package Boat;
 
 public class SetOfBoats {
-    private static int[] lengths = {5, 4, 3, 3, 2};
+    private static final int[] lengths = {5, 4, 3, 3, 2};
     private static final String[] names = {"Carrier", "Battleship", "Cruiser", "Submarine", "Destroyer"};
-    private Boat[] set;
+    private final Boat[] set;
 
-    public class Boat {
+    public static class Boat {
         private final String name;
         private final int length;
         private boolean floating;

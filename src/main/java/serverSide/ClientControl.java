@@ -12,7 +12,7 @@ import java.net.Socket;
 public class ClientControl {
 
     private AClient autoClient = null;
-    private boolean automata;
+    private final boolean automata;
     private String name;
     private Socket socket = null;
     private Server server = null;
