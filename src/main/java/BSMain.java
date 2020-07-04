@@ -25,6 +25,7 @@ public class BSMain {
 
         // default 1 just for now
         int numberOfPlayer = 1;
+
         int port;
         if (args.length != 0) {
             port = Integer.parseInt(args[0]);
