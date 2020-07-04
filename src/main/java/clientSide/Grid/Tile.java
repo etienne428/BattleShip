@@ -88,12 +88,19 @@ public class Tile extends JButton {
     }
 
     public void resultOfAttempt(String s) {
-        if (s.equalsIgnoreCase("MISS ")) {
+        if (s.equalsIgnoreCase(" MISS")) {
             value = TileState.MISSED;
-        } else if (s.equalsIgnoreCase("TOUCH ")) {
+            setText(String.valueOf(value.getDescription()));
+            wg.setText("\n Attempt missed");
+        } else if (s.equalsIgnoreCase(" TOUCH")) {
             value = TileState.TOUCHED;
+            setText(String.valueOf(value.getDescription()));
+            wg.setText("\nYou reached a boat!");
         } else {
-            System.out.println(s + " is not correct, should be MISS or TOUCH ");
+            System.out.println("\"" + s + "\" is not correct, should be MISS or TOUCH ");
         }
+        setEnabled(false);
+        repaint();
+        revalidate();
     }
 }

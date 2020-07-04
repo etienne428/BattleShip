@@ -19,13 +19,13 @@ public class Client {
     private final GameFrame gameFrame = new GameFrame(this);
     private final Thread GRAPHIC = new Thread(gameFrame);
 
-    public Client(String address, int port, String name) throws IOException {
+    public Client(String address, int port, String name) {
         try {
             socket = new Socket(address, port);
             inputStream = socket.getInputStream();
             outputStream = socket.getOutputStream();
             Listener consoleListener = new Listener(this, outputStream);
-            Listener serverListener = new Listener(this, inputStream, outputStream);
+            Listener serverListener = new Listener(this, inputStream);
 
             GRAPHIC.start();
 
@@ -55,6 +55,7 @@ public class Client {
                     break;
                 case LAUNC:
                     gameFrame.resultOfAttempt(s);
+                    break;
                 case TOCOL:
                     // will announce that boat has been sank
                     System.out.println("You sank the " + SetOfBoats.getNames()[Integer.parseInt(s)]);

@@ -96,13 +96,18 @@ public class ATile extends JButton {
         return column;
     }
 
-    public void resultOfAttempt(String s) {
-        if (s.equalsIgnoreCase("MISS ")) {
+    /**
+     * Send the result of the attempt back.
+     *
+     * @param missOrTouch MISS or TOUCH
+     */
+    public void resultOfAttempt(String missOrTouch) {
+        if (missOrTouch.equalsIgnoreCase("MISS ")) {
             value = TileState.MISSED;
-        } else if (s.equalsIgnoreCase("TOUCH ")) {
+        } else if (missOrTouch.equalsIgnoreCase("TOUCH ")) {
             value = TileState.TOUCHED;
         } else {
-            System.out.println(s + " is not correct, should be MISS or TOUCH ");
+            System.out.println(missOrTouch + " is not correct, should be MISS or TOUCH ");
         }
     }
 }

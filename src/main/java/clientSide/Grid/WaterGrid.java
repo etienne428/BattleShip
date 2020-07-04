@@ -133,7 +133,7 @@ public class WaterGrid extends JPanel {
         Tile p =  grid[index];
         for (int i = 0; i < length - 1; i++) {
             p.isEmpty();
-            System.out.println("Index = " + index);
+            //System.out.println("Index = " + index);
             index += tilesToJump;
             if (index >= numberOfTiles) {
                 System.out.println(p.getLine() + " is equal to " + (p.getLine() - 65));
@@ -208,15 +208,24 @@ public class WaterGrid extends JPanel {
         if (s.length() != 2) {
             System.out.println("Wrong parsing of Tile : " + s);
         }
-        System.out.println(s + " should be a letter and a number without space");
         int line = ((int) s.charAt(0)) - 65;
-        int column = s.charAt(1);
+        int column = Integer.parseInt(String.valueOf(s.charAt(1)));
+        //System.out.println(s + " should be a letter and a number without space. it gives line "
+          //      + line + " + column " + column + " " + s.charAt(1));
+
         String message = grid[getPointIndex(line, column)].action();
-        client.sendMessage("LAUNC " + message);
+        if (message.contains("X")) {
+            client.sendMessage("LAUNC TOUCH");
+        } else {
+            client.sendMessage("LAUNC MISS");
+        }
     }
 
     public void resultOfAttempt(String s) {
         lastAttempt.resultOfAttempt(s);
+        repaint();
+        revalidate();
+        printBoard();
     }
 
     public void setAttempt(Tile tile) {
@@ -225,5 +234,9 @@ public class WaterGrid extends JPanel {
 
     public int getGameStatus() {
         return gameStatus;
+    }
+
+    public void setText(String text) {
+        game.setText(text);
     }
 }

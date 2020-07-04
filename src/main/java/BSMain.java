@@ -1,7 +1,7 @@
 import clientSide.Client;
 import serverSide.Server;
-import serverSide.Server1Player;
-import serverSide.Server2Player;
+import serverSide1Player.Server1Player;
+import serverSide2Player.Server2Player;
 
 import java.io.IOException;
 import java.net.BindException;

@@ -26,7 +26,7 @@ public class GameFrame extends JFrame implements Runnable {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationByPlatform(true);
         setLayout(new GridLayout(2, 1));
-        setMinimumSize(new Dimension(500, 500));
+        setMinimumSize(new Dimension(300, 300));
 
         myGrid = new WaterGrid(client, this, true);
         add(myGrid);
@@ -52,7 +52,7 @@ public class GameFrame extends JFrame implements Runnable {
             try {
                 myGrid.addBoat((char) line, column, SetOfBoats.getLengths()[i], northSouth);
             } catch (BoatNotSetException e) {
-                System.out.println(e.getMessage());
+                //System.out.println(e.getMessage());
                 i--;
                 //System.out.println("Boat not set.");
 
@@ -65,17 +65,23 @@ public class GameFrame extends JFrame implements Runnable {
     private void setStartView() {
         remove(myGrid);
         myGrid.startGame();
+        opponentGrid.setMaximumSize(new Dimension(200, 200));
+
         add(opponentGrid);
         JPanel myPanel = new JPanel();
         myPanel.setLayout(new BorderLayout());
-        myPanel.setMaximumSize(new Dimension(500, 300));
-        myGrid.setMaximumSize(new Dimension(300, 300));
+        myPanel.setMaximumSize(new Dimension(400, 200));
+        myGrid.setMaximumSize(new Dimension(200, 200));
         myPanel.add(myGrid, BorderLayout.LINE_START);
 
         text = new JTextArea();
+        text.setMaximumSize(new Dimension(100, 200));
+        JScrollPane scrollPane = new JScrollPane(text);
+        scrollPane.setVerticalScrollBar(new JScrollBar());
+        scrollPane.setMaximumSize(new Dimension(100, 200));
         //text.setFont(Font.getFont(""));
         text.append("Choose a tile to target");
-        myPanel.add(text, BorderLayout.LINE_END);
+        myPanel.add(text, BorderLayout.CENTER);
         add(myPanel);
     }
 
@@ -110,6 +116,9 @@ public class GameFrame extends JFrame implements Runnable {
 
     public void resultOfAttempt(String s) {
         opponentGrid.resultOfAttempt(s);
+        repaint();
+        revalidate();
+        pack();
     }
 
     public void printWG() {
@@ -120,6 +129,6 @@ public class GameFrame extends JFrame implements Runnable {
     }
 
     public void setText(String t) {
-        text.append(t);
+        text.replaceRange(t, 0, text.getSelectionEnd());
     }
 }

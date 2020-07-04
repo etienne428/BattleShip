@@ -4,20 +4,21 @@ import Boat.SetOfBoats;
 import Utils.CommandException;
 import Utils.CommandToClient;
 import Utils.Parser;
-import serverSide.ClientControl;
+import serverSide.Game;
 
 public class AClient {
 
-    private final AGameFrame gameFrame = new AGameFrame(this);
-    private final ClientControl clientControl;
+    private final AGameFrame gameFrame;
+    private final Game game;
 
-    public AClient(ClientControl cc) {
-        clientControl = cc;
+    public AClient(Game game) {
+        gameFrame = new AGameFrame(this, game);
+        this.game = game;
         Thread GRAPHIC = new Thread(gameFrame);
         GRAPHIC.start();
 
         //serverListener.start();
-        System.out.println("Client running");
+        System.out.println("AClient running");
         gameFrame.launch();
     }
 
@@ -30,8 +31,10 @@ public class AClient {
                 case START:
                     gameFrame.startGame(s);
                     break;
+
+                    // Check attempt from other player
                 case ATEMP:
-                    gameFrame.attempt(s);
+                    gameFrame.attemptCheck(s);
                     break;
                 case LAUNC:
                     gameFrame.resultOfAttempt(s);
@@ -48,12 +51,31 @@ public class AClient {
             }
 
         } catch (CommandException e) {
-            System.out.println("Command " + s + " not valid");
+            System.out.println("A: Command " + s + " not valid");
             e.printStackTrace();
         }
     }
 
     public void sendMessage(String s) {
-        clientControl.executeCommand(s);
+        ;
+    }
+
+    /**
+     * Sends to the automata player the attempt of the human player to be checked.
+     * H is for Human
+     *
+     * @param s One letter and one int for the grid coordinate
+     */
+    public void attemptCheck(String s) {
+        gameFrame.attemptCheck(s);
+    }
+
+    /**
+     * Send the result of the attempt back to the automata.
+     *
+     * @param missOrTouch MISS or TOUCH
+     */
+    public void resultOfAttempt(String missOrTouch) {
+        gameFrame.resultOfAttempt(missOrTouch);
     }
 }

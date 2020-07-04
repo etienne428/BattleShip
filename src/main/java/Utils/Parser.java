@@ -7,6 +7,11 @@ public class Parser {
             throw new CommandException();
         }
         String c = (s.substring(0, 5));
-        return c;
+        return c.toUpperCase();
+    }
+
+    public static String getElement(String s) {
+        s = s.substring(5);
+        return s.replaceAll(" ", "");
     }
 }

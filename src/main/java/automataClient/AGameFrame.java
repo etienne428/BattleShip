@@ -2,23 +2,28 @@ package automataClient;
 
 import Boat.SetOfBoats;
 import Utils.BoatNotSetException;
+import serverSide.Game;
 
 import java.util.Random;
 
 public class AGameFrame implements Runnable {
 
     private final AClient client;
+    private final Game game;
     private AWaterGrid myGrid;
     private AWaterGrid opponentGrid;
     private final Random random = new Random();
 
-    public AGameFrame(AClient client) {
+    public AGameFrame(AClient client, Game game) {
         this.client = client;
+        this.game = game;
     }
 
     public void launch() {
         myGrid = new AWaterGrid(client, this, true);
         setBoatOnDefault();
+        game.setAutomataBoats(myGrid.getBoatsPlacement());
+        game.setNextAttempt(myGrid.getNextAttempt());
     }
 
     void setBoatOnDefault() {
@@ -35,18 +40,24 @@ public class AGameFrame implements Runnable {
 
             }
             try {
-                System.out.println("north " + northSouth + ", line " + (char) line + ", column " + column);
+                //System.out.println("north " + northSouth + ", line " + (char) line + ", column " + column);
                 myGrid.addBoat((char) line, column, SetOfBoats.getLengths()[i], northSouth);
             } catch (BoatNotSetException e) {
-                System.out.println(e.getMessage());
+                //System.out.println(e.getMessage());
 
             }
         }
         myGrid.printBoard();
+        game.setAutomataBoats(myGrid.getBoatsPlacement());
     }
 
-    public void attempt(String s) {
-        myGrid.attempt(s);
+    /**
+     * Check attempt from other player.
+     *
+     * @param s One letter and one int for the grid coordinate
+     */
+    public void attemptCheck(String s) {
+        myGrid.attemptCheck(s);
     }
 
     @Override
@@ -75,7 +86,21 @@ public class AGameFrame implements Runnable {
         }
     }
 
-    public void resultOfAttempt(String s) {
-        opponentGrid.resultOfAttempt(s);
+    /**
+     * Send the result of the attempt back.
+     *
+     * @param missOrTouch MISS or TOUCH
+     */
+    public void resultOfAttempt(String missOrTouch) {
+        opponentGrid.resultOfAttempt(missOrTouch);
+    }
+
+    /**
+     * Sends the result of the other player's attempt to game.java.
+     *
+     * @param missOrTouch MISS or TOUCH
+     */
+    public void resultOfAttemptO(String missOrTouch) {
+        game.setResultOfAttemptH(missOrTouch);
     }
 }

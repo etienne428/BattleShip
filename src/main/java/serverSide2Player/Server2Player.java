@@ -1,6 +1,8 @@
-package serverSide;
+package serverSide2Player;
 
-import serverSide.Game.Game;
+import serverSide.ClientControl;
+import serverSide.Game;
+import serverSide.Server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -8,7 +10,7 @@ import java.net.Socket;
 
 public class Server2Player extends Server implements Runnable {
     private final ServerSocket serverSocket;
-    private final Game game;
+    private final Game2P game;
     private final int port;
     // Count of connected clients
     static int count = 0;
@@ -18,11 +20,11 @@ public class Server2Player extends Server implements Runnable {
     /**
      * First client is human, second is automatic
      */
-    private final ClientControl[] listOfClient = new ClientControl[NOC];
+    private final ClientControl2Player[] listOfClient = new ClientControl2Player[NOC];
 
     public Server2Player(int port) throws IOException {
         this.port = port;
-        game = new Game(this);
+        game = new Game2P();
         serverSocket = new ServerSocket(port);
     }
 
@@ -30,7 +32,7 @@ public class Server2Player extends Server implements Runnable {
         return port;
     }
 
-    public ClientControl[] getListOfClient() {
+    public ClientControl2Player[] getListOfClient() {
         return listOfClient;
     }
 
@@ -40,7 +42,7 @@ public class Server2Player extends Server implements Runnable {
             while (true) {
                 if (count < NOC) {
                     Socket clientSocket = serverSocket.accept();
-                    ClientControl ct = new ClientControl(this, clientSocket, game);
+                    ClientControl2Player ct = new ClientControl2Player(this, clientSocket, game);
                     listOfClient[count++] = ct;
                     ct.start();
                     System.out.println("I'm here");
@@ -53,13 +55,22 @@ public class Server2Player extends Server implements Runnable {
     }
 
     public void ready(ClientControl clientControl) {
-        ClientControl cc = new ClientControl(this);
+        /*ClientControl2Player cc = new ClientControl2Player(this, );
         System.out.println(cc.toString());
         listOfClient[count++] = cc;
         System.out.println(listOfClient[count - 1].toString());
         cc.start();
-        System.out.println(cc.toString());
+        System.out.println(cc.toString());*/
         game.ready();
+    }
+
+    @Override
+    public void sendToOtherClients(String s, ClientControl cc) {
+        if (cc == listOfClient[0]) {
+            listOfClient[1].sendMessage(s);
+        } else {
+            listOfClient[0].sendMessage(s);
+        }
     }
 
     public int getNOC() {
@@ -67,15 +78,16 @@ public class Server2Player extends Server implements Runnable {
     }
 
     public void broadcast(String message) {
-        for (ClientControl cc :listOfClient) {
+        for (ClientControl2Player cc :listOfClient) {
             System.out.println(cc.toString());
             cc.sendMessage(message);
         }
     }
 
-    public void sendToOtherClients(String s, ClientControl clientControl) {
-        for (ClientControl cc: listOfClient) {
-            if (cc != clientControl) {
+    public void sendToOtherClients(String s, boolean toAutomata) {
+        //need to find a solution for this one
+        for (ClientControl2Player cc: listOfClient) {
+            if (true) {//cc != clientControl) {
                 cc.sendMessage(s);
             }
         }

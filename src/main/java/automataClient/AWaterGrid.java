@@ -6,6 +6,7 @@ import Utils.TileState;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 
 import static Utils.TileState.*;
 
@@ -15,12 +16,14 @@ public class AWaterGrid extends JPanel {
     public static final int NUMBEROFCOLUMNS = 10;
     public static final int NUMBEROFLINES = 12;
     private final int numberOfTiles = NUMBEROFLINES * NUMBEROFCOLUMNS;
-    private final AGameFrame game;
+    private final AGameFrame gameFrame;
     private final boolean myGrid;
     private ATile nextBoat;
     private ATile lastAttempt;
     private final SetOfBoats setOfBoat;
     private int boatToAdd = 0;
+    private String boatsPlacement = "";
+    private final Random random = new Random();
 
     /**
      * As a line, 0 is very first, coded in reading order :
@@ -33,9 +36,9 @@ public class AWaterGrid extends JPanel {
      */
     private final ATile[] grid = new ATile[numberOfTiles];
 
-    public AWaterGrid(AClient client, AGameFrame game, boolean myGrid) {
+    public AWaterGrid(AClient client, AGameFrame gameFrame, boolean myGrid) {
         this.client = client;
-        this.game = game;
+        this.gameFrame = gameFrame;
         this.myGrid = myGrid;
         setOfBoat = new SetOfBoats();
         int k = 0;
@@ -71,7 +74,7 @@ public class AWaterGrid extends JPanel {
             return;
         }
         try {
-            addBoat(nextBoat.getLine(), nextBoat.getColumn(), setOfBoat.getLengths()[boatToAdd], northSouth);
+            addBoat(nextBoat.getLine(), nextBoat.getColumn(), SetOfBoats.getLengths()[boatToAdd], northSouth);
             boatToAdd++;
             if (boatToAdd == setOfBoat.numberOfBoats()) {
                 client.sendMessage("READY");
@@ -119,8 +122,13 @@ public class AWaterGrid extends JPanel {
         for (int i = 0; i < length; i++) {
             p.isEmpty();
             index += tilesToJump;
-            System.out.println(index + " index");
+            //System.out.println(index + " index");
             p = grid[index];
+        }
+        if (northSouth) {
+            boatsPlacement += l + c + "S";
+        } else {
+            boatsPlacement += l + c + "E";
         }
 
         index = getPointIndex((int) l - 'A', c);
@@ -128,9 +136,8 @@ public class AWaterGrid extends JPanel {
             p = grid[index];
             p.setBoat();
             index += tilesToJump;
-
         }
-        System.out.println("Boat added!!!!!!!!!!!!!");
+        //System.out.println("Boat added!!!!!!!!!!!!!");
     }
 
     public int getPointIndex(int line, int column) {
@@ -153,7 +160,7 @@ public class AWaterGrid extends JPanel {
                 value = t.getValue();
                 switch (value) {
                     case SEE:
-                        System.out.print(" S");
+                        System.out.print("__");
                         break;
                     case BOAT:
                         if (myGrid) {
@@ -181,24 +188,51 @@ public class AWaterGrid extends JPanel {
         nextBoat = tile;
     }
 
-    public void attempt(String s) {
-        s.replace(" ", "");
+    /**
+     * Check attempt from other player.
+     *
+     * @param s One letter and one int for the grid coordinate
+     */
+    public void attemptCheck(String s) {
+        s = s.replace(" ", "");
         s = s.toUpperCase();
         if (s.length() != 2) {
             System.out.println("Wrong parsing of Tile : " + s);
         }
+        s = s.replaceAll(" ", "");
         System.out.println(s + " should be a letter and a number without space");
         int line = ((int) s.charAt(0)) - 65;
-        int column = Integer.valueOf(s.charAt(1));
+        int column = Integer.parseInt(String.valueOf(s.charAt(1)));
+        //System.out.println(s + " should be a letter and a number without space. it gives line "
+          //      + line + " + column " + column + " " + s.charAt(1));
         String message = grid[getPointIndex(line, column)].action();
-        client.sendMessage("LAUNC " + message);
+        if (message.contains("X")) {
+            gameFrame.resultOfAttemptO("LAUNC TOUCH");
+        } else {
+            client.sendMessage("LAUNC MISS");
+        }
     }
 
-    public void resultOfAttempt(String s) {
-        lastAttempt.resultOfAttempt(s);
+    /**
+     * Send the result of the attempt back.
+     *
+     * @param missOrTouch MISS or TOUCH
+     */
+    public void resultOfAttempt(String missOrTouch) {
+        lastAttempt.resultOfAttempt(missOrTouch);
     }
 
     public void setAttempt(ATile tile) {
         lastAttempt = tile;
+    }
+
+    public String getBoatsPlacement() {
+        return boatsPlacement;
+    }
+
+    public String getNextAttempt() {
+        char line = (char) (random.nextInt(12) + 65);
+        int column = random.nextInt(10);
+        return line + "" + column;
     }
 }
