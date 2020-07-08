@@ -4,7 +4,7 @@ import serverSide.ClientControl;
 import serverSide.Game;
 import serverSide1Player.ClientControl1Player;
 
-public class Game2P  extends Game {
+public class Game2P extends Game {
     public void setAutomataBoats(String boats) {
 
     }
@@ -35,12 +35,12 @@ public class Game2P  extends Game {
     }
 
     @Override
-    public void sendResultToH() {
+    public void sendResultToH(String missOrTouch) {
 
     }
 
     @Override
-    public void setResultOfAttemptH(String missOrTouch) {
+    public void printAGrid() {
 
     }
 }

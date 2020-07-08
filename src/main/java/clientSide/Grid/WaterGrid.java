@@ -24,7 +24,8 @@ public class WaterGrid extends JPanel {
     private final GameFrame game;
     private final boolean myGrid;
     private Tile nextBoat;
-    private Tile lastAttempt;
+    private Tile myLastAttempt;
+    private Tile hisLastAttempt;
     private final SetOfBoats setOfBoat;
     private int boatToAdd = 0;
 
@@ -144,6 +145,7 @@ public class WaterGrid extends JPanel {
         }
 
         index = getPointIndex((int) l - 'A', c);
+
         for (int i = 0; i < length; i++) {
             p = grid[index];
             p.setBoat();
@@ -162,6 +164,7 @@ public class WaterGrid extends JPanel {
     }
 
     public void printBoard() {
+        System.out.println("Printing Client's board, myGrid = " + myGrid);
         System.out.println("__|_0_1_2_3_4_5_6_7_8_9");
         Tile t;
         TileState value;
@@ -213,7 +216,11 @@ public class WaterGrid extends JPanel {
         //System.out.println(s + " should be a letter and a number without space. it gives line "
           //      + line + " + column " + column + " " + s.charAt(1));
 
-        String message = grid[getPointIndex(line, column)].action();
+        if (hisLastAttempt != null) {
+            hisLastAttempt.setBackground(null);
+        }
+        hisLastAttempt = grid[getPointIndex(line, column)];
+        String message = hisLastAttempt.action();
         if (message.contains("X")) {
             client.sendMessage("LAUNC TOUCH");
         } else {
@@ -222,14 +229,17 @@ public class WaterGrid extends JPanel {
     }
 
     public void resultOfAttempt(String s) {
-        lastAttempt.resultOfAttempt(s);
+        myLastAttempt.resultOfAttempt(s);
         repaint();
         revalidate();
-        printBoard();
+        //printBoard();
     }
 
     public void setAttempt(Tile tile) {
-        lastAttempt = tile;
+        if (myLastAttempt != null) {
+            myLastAttempt.setBackground(null);
+        }
+        myLastAttempt = tile;
     }
 
     public int getGameStatus() {

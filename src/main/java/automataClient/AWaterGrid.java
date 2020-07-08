@@ -3,14 +3,13 @@ package automataClient;
 import Boat.SetOfBoats;
 import Utils.BoatNotSetException;
 import Utils.TileState;
+import clientSide.Grid.Tile;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.Random;
 
 import static Utils.TileState.*;
 
-public class AWaterGrid extends JPanel {
+public class AWaterGrid {
     private final AClient client;
 
     public static final int NUMBEROFCOLUMNS = 10;
@@ -18,11 +17,13 @@ public class AWaterGrid extends JPanel {
     private final int numberOfTiles = NUMBEROFLINES * NUMBEROFCOLUMNS;
     private final AGameFrame gameFrame;
     private final boolean myGrid;
-    private ATile nextBoat;
     private ATile lastAttempt;
-    private final SetOfBoats setOfBoat;
-    private int boatToAdd = 0;
-    private String boatsPlacement = "";
+    private TileState resultOfLastAttempt;
+
+    /**
+     * If last attempt was a miss, field = 0. Else increments to 1, 2, 3 and 4 (north, east, south, west).
+     */
+    private int directionOfNextAttempt = 0;
     private final Random random = new Random();
 
     /**
@@ -40,31 +41,19 @@ public class AWaterGrid extends JPanel {
         this.client = client;
         this.gameFrame = gameFrame;
         this.myGrid = myGrid;
-        setOfBoat = new SetOfBoats();
+        SetOfBoats setOfBoat = new SetOfBoats();
         int k = 0;
-        setLayout(new GridLayout(NUMBEROFLINES + 1, NUMBEROFCOLUMNS + 1));
-        JLabel all = new JLabel("");
-        add(all);
-        all.setAlignmentX(CENTER_ALIGNMENT);
-        for (int i = 1; i <= 10; i++) {
-            all = new JLabel(String.valueOf(i), SwingConstants.CENTER);
-            all.setAlignmentX(CENTER_ALIGNMENT);
-            add(all);
-        }
+
         char c = 'A';
         for (int i = 0; i < NUMBEROFLINES; i++) {
-            all = new JLabel(String.valueOf(c), SwingConstants.CENTER);
-            all.setAlignmentX(CENTER_ALIGNMENT);
-            add(all);
             for (int j = 0; j < NUMBEROFCOLUMNS; j++) {
-                grid[k] = new ATile(client, this, c, j, myGrid);
-                add(grid[k++]);
+                grid[k++] = new ATile(client, this, c, j, myGrid);
             }
             c++;
         }
     }
 
-    public void addBoatFromTile(ATile direction) {
+    /*public void addBoatFromTile(ATile direction) {
         boolean northSouth;
         if (direction.getLine() == nextBoat.getLine()) {
             northSouth = false;
@@ -82,14 +71,7 @@ public class AWaterGrid extends JPanel {
         } catch (BoatNotSetException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    public void startGame() {
-        ATile.setPlaying();
-        for (ATile t: grid) {
-            t.setEnabled(false);
-        }
-    }
+    }*/
 
     /**
      * Add a boat from clientSide.Grid.Tile (l, c) = (A, 3).
@@ -125,11 +107,6 @@ public class AWaterGrid extends JPanel {
             //System.out.println(index + " index");
             p = grid[index];
         }
-        if (northSouth) {
-            boatsPlacement += l + c + "S";
-        } else {
-            boatsPlacement += l + c + "E";
-        }
 
         index = getPointIndex((int) l - 'A', c);
         for (int i = 0; i < length; i++) {
@@ -140,6 +117,15 @@ public class AWaterGrid extends JPanel {
         //System.out.println("Boat added!!!!!!!!!!!!!");
     }
 
+    /**
+     *
+     *
+     * Get the index of the Tile in grid []
+     *
+     * @param line    line of the Tile
+     * @param column  column of the tile
+     * @return        the index in array grid[]
+     */
     public int getPointIndex(int line, int column) {
         if (column >= NUMBEROFCOLUMNS || line >= NUMBEROFLINES) {
             return -1;
@@ -149,6 +135,7 @@ public class AWaterGrid extends JPanel {
     }
 
     public void printBoard() {
+        System.out.println("Printing Automata's board, myGrid = " + myGrid);
         System.out.println("__|_0_1_2_3_4_5_6_7_8_9");
         ATile t;
         TileState value;
@@ -163,11 +150,7 @@ public class AWaterGrid extends JPanel {
                         System.out.print("__");
                         break;
                     case BOAT:
-                        if (myGrid) {
-                            System.out.print(" B");
-                        } else {
-                            System.out.println(" S");
-                        }
+                        System.out.print(" B");
                         break;
                     case MISSED:
                         System.out.print(" O");
@@ -184,55 +167,124 @@ public class AWaterGrid extends JPanel {
         }
     }
 
-    public void setBeginOfNextBoat(ATile tile) {
+    /*public void setBeginOfNextBoat(ATile tile) {
         nextBoat = tile;
-    }
+    }*/
 
     /**
+     *
+     *
      * Check attempt from other player.
      *
      * @param s One letter and one int for the grid coordinate
      */
     public void attemptCheck(String s) {
-        s = s.replace(" ", "");
+        s = s.replaceAll(" ", "");
         s = s.toUpperCase();
         if (s.length() != 2) {
             System.out.println("Wrong parsing of Tile : " + s);
         }
-        s = s.replaceAll(" ", "");
-        System.out.println(s + " should be a letter and a number without space");
         int line = ((int) s.charAt(0)) - 65;
         int column = Integer.parseInt(String.valueOf(s.charAt(1)));
-        //System.out.println(s + " should be a letter and a number without space. it gives line "
-          //      + line + " + column " + column + " " + s.charAt(1));
+
         String message = grid[getPointIndex(line, column)].action();
         if (message.contains("X")) {
             gameFrame.resultOfAttemptO("LAUNC TOUCH");
         } else {
-            client.sendMessage("LAUNC MISS");
+            gameFrame.resultOfAttemptO("LAUNC MISS");
         }
     }
 
     /**
-     * Send the result of the attempt back.
+     *
+     *
+     * Store the result of this automata's last attempt.
      *
      * @param missOrTouch MISS or TOUCH
      */
     public void resultOfAttempt(String missOrTouch) {
-        lastAttempt.resultOfAttempt(missOrTouch);
+        //System.out.println(missOrTouch);
+        TileState attempt = lastAttempt.resultOfAttempt(missOrTouch);
+        if (attempt == MISSED && directionOfNextAttempt != 0) {
+            directionOfNextAttempt %= 4;
+            directionOfNextAttempt++;
+        } else if (attempt == TOUCHED){
+            resultOfLastAttempt = attempt;
+            if (directionOfNextAttempt == 0) {
+                directionOfNextAttempt++;
+            }
+        } else {
+            resultOfLastAttempt = attempt;
+        }
     }
 
-    public void setAttempt(ATile tile) {
-        lastAttempt = tile;
-    }
-
-    public String getBoatsPlacement() {
-        return boatsPlacement;
-    }
-
+    /**
+     *
+     *
+     * Randomly (for now) choose a Tile to target.
+     *
+     * @return  One letter and one int for the grid coordinate
+     */
     public String getNextAttempt() {
+        if (lastAttempt != null) {
+            System.out.println("directionOfNextAttempt " + directionOfNextAttempt + ", lastTile = " + lastAttempt.getLine() + " " + lastAttempt.getColumn());
+        }
+        if (directionOfNextAttempt != 0) {
+            char line = lastAttempt.getLine();
+            int column = lastAttempt.getColumn();
+            switch (directionOfNextAttempt) {
+                case 1:
+                    line--;
+                    break;
+                case 2:
+                    column++;
+                    break;
+                case 3:
+                    line++;
+                    break;
+                case 4:
+                    column--;
+                    break;
+                default:
+                    System.out.println("Error : directionOfNextAttempt = " + directionOfNextAttempt);
+                    return getNextAttempt();
+            }
+            if (checkForNextAttempt(line, column)) {
+                return line + "" + column;
+            } else if (directionOfNextAttempt == 4) {
+                directionOfNextAttempt = 0;
+                return getNextAttempt();
+            } else {
+                directionOfNextAttempt++;
+                return getNextAttempt();
+            }
+        }
         char line = (char) (random.nextInt(12) + 65);
         int column = random.nextInt(10);
-        return line + "" + column;
+        if (checkForNextAttempt(line, column)) {
+            lastAttempt = grid[getPointIndex(line - 65, column)];
+            return line + "" + column;
+        } else {
+            return getNextAttempt();
+        }
+    }
+
+    /**
+     * Check that a tile is valid and hasn't been targeted yet
+     *
+     * @return True if Tile is a good choice
+     */
+    private boolean checkForNextAttempt(char line, int column) {
+        int index;
+        try {
+            index = getPointIndex(line - 65, column);
+        } catch (IndexOutOfBoundsException e) {
+            return false;
+        }
+
+        if (index < 0) {
+            return false;
+        }
+        return grid[index].getValue() == SEE;
     }
 }

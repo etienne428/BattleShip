@@ -8,7 +8,6 @@ public class Game1P extends Game {
 
     private Server server;
     private AClient automata;
-    private String automataBoats;
     private ClientControl1Player cc;
 
     /**
@@ -16,12 +15,6 @@ public class Game1P extends Game {
      * A is for Automata
      */
     private String nextAttemptA = null;
-
-    /**
-     * Result of human player's attempt.
-     * H is for Human
-     */
-    private String resultOfAttemptH;
 
 
     public Game1P(Server server) {
@@ -36,10 +29,14 @@ public class Game1P extends Game {
 
     @Override
     public void ready() {
-        server.broadcast("START " + automataBoats);
+
+        automata.startGame();
+        server.broadcast("START ");
     }
 
     /**
+     *
+     *
      * Sends to the human player the attempt of the automata.
      * A is for Automata
      */
@@ -49,6 +46,8 @@ public class Game1P extends Game {
     }
 
     /**
+     *
+     *
      * Sends to the automata player the attempt of the human player to be checked.
      * H is for Human
      *
@@ -61,45 +60,37 @@ public class Game1P extends Game {
     }
 
     /**
+     *
+     *
      * Send the result of the attempt back to the automata.
      *
      * @param missOrTouch MISS or TOUCH
      */
     @Override
     public void sendResultToA(String missOrTouch) {
+        //System.out.println("sendResultToA = " + missOrTouch);
         automata.resultOfAttempt(missOrTouch);
     }
 
     /**
+     *
+     *
      * Send the result of the attempt back to the human player.
      */
     @Override
-    public void sendResultToH() {
+    public void sendResultToH(String resultOfAttemptH) {
+        //System.out.println("sendResultToH = " + resultOfAttemptH);
         server.broadcast(resultOfAttemptH);
     }
 
     @Override
-    /**
-     * Store the result of human's player's attempt.
-     *
-     * @param rOAH the Result Of Attempt from the Human player
-     */
-    public void setResultOfAttemptH(String rOAH) {
-        resultOfAttemptH = rOAH;
+    public void printAGrid() {
+        automata.printGrid();
     }
 
     /**
-     * Store the boats of the automata.
-     * Will be sent to the human player in method ready()
      *
-     * @param boats 5 triads of letters (from 'A' to 'K'),
-     *             int (from 0 to 9) and letter ('N' or 'E', north or East)
-     */
-    public void setAutomataBoats(String boats) {
-        automataBoats = boats;
-    }
-
-    /**
+     *
      * Store the automata's next attempt.
      *
      * @param nextAttempt One letter and one int for the grid coordinate

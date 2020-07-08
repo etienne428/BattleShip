@@ -25,14 +25,15 @@ public class GameFrame extends JFrame implements Runnable {
         this.name = name;
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationByPlatform(true);
-        setLayout(new GridLayout(2, 1));
-        setMinimumSize(new Dimension(300, 300));
+        setLayout(new GridLayout(1, 2));
+        setMinimumSize(new Dimension(1000, 600));
 
         myGrid = new WaterGrid(client, this, true);
         add(myGrid);
         pack();
         setVisible(true);
         setBoatOnDefault();
+        client.sendMessage("READY");
     }
 
     void setBoatOnDefault() {
@@ -58,24 +59,24 @@ public class GameFrame extends JFrame implements Runnable {
 
             }
         }
-        myGrid.printBoard();
-        setStartView();
+        //myGrid.printBoard();
     }
 
     private void setStartView() {
         remove(myGrid);
         myGrid.startGame();
-        opponentGrid.setMaximumSize(new Dimension(200, 200));
+        opponentGrid.setMaximumSize(new Dimension(300, 300));
 
         add(opponentGrid);
         JPanel myPanel = new JPanel();
         myPanel.setLayout(new BorderLayout());
-        myPanel.setMaximumSize(new Dimension(400, 200));
+        myPanel.setMaximumSize(new Dimension(800, 400));
         myGrid.setMaximumSize(new Dimension(200, 200));
         myPanel.add(myGrid, BorderLayout.LINE_START);
 
         text = new JTextArea();
         text.setMaximumSize(new Dimension(100, 200));
+        text.setMinimumSize(new Dimension(100, 200));
         JScrollPane scrollPane = new JScrollPane(text);
         scrollPane.setVerticalScrollBar(new JScrollBar());
         scrollPane.setMaximumSize(new Dimension(100, 200));
@@ -94,23 +95,9 @@ public class GameFrame extends JFrame implements Runnable {
 
     }
 
-    public void startGame(String message) {
+    public void startGame() {
         myGrid.startGame();
 
-        opponentGrid = new WaterGrid(client, this, false);
-        String[] tiles = message.split(" ");
-        int i = 0;
-        for (String t: tiles) {
-            try {
-                if (t.length() != 3) {
-                    throw new BoatNotSetException(t + " is not a proper tile encoding");
-                }
-                opponentGrid.addBoat( t.charAt(0), t.charAt(1), SetOfBoats.getLengths()[i++],
-                        t.substring(2).equalsIgnoreCase("N"));
-            } catch (BoatNotSetException e) {
-                e.printStackTrace();
-            }
-        }
         setStartView();
     }
 
@@ -129,6 +116,7 @@ public class GameFrame extends JFrame implements Runnable {
     }
 
     public void setText(String t) {
-        text.replaceRange(t, 0, text.getSelectionEnd());
+        text.setText("");
+        text.setText(t);
     }
 }

@@ -5,6 +5,7 @@ import Utils.TileState;
 import clientSide.Client;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Tile extends JButton {
 
@@ -65,11 +66,13 @@ public class Tile extends JButton {
     public String action() {
         if (value == TileState.BOAT) {
             value = TileState.TOUCHED;
+            setBackground(Color.GREEN);
         } else if (value == TileState.SEE) {
             value = TileState.MISSED;
+            setBackground(Color.RED);
         }
         setText(String.valueOf(value.getDescription()));
-        System.out.println(value.name());
+        //System.out.println(value.name());
         return String.valueOf(value.getDescription());
     }
 
@@ -92,10 +95,12 @@ public class Tile extends JButton {
             value = TileState.MISSED;
             setText(String.valueOf(value.getDescription()));
             wg.setText("\n Attempt missed");
+            setBackground(Color.RED);
         } else if (s.equalsIgnoreCase(" TOUCH")) {
             value = TileState.TOUCHED;
             setText(String.valueOf(value.getDescription()));
             wg.setText("\nYou reached a boat!");
+            setBackground(Color.GREEN);
         } else {
             System.out.println("\"" + s + "\" is not correct, should be MISS or TOUCH ");
         }

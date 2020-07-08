@@ -4,10 +4,6 @@ import serverSide.Game;
 import serverSide1Player.ClientControl1Player;
 
 public class GameMP extends Game {
-    @Override
-    public void setAutomataBoats(String boats) {
-
-    }
 
     @Override
     public void addPlayer(ClientControl1Player clientControl1Player) {
@@ -40,12 +36,12 @@ public class GameMP extends Game {
     }
 
     @Override
-    public void sendResultToH() {
+    public void sendResultToH(String missOrTouch) {
 
     }
 
     @Override
-    public void setResultOfAttemptH(String missOrTouch) {
+    public void printAGrid() {
 
     }
 }

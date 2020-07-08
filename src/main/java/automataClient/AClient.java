@@ -14,12 +14,11 @@ public class AClient {
     public AClient(Game game) {
         gameFrame = new AGameFrame(this, game);
         this.game = game;
-        Thread GRAPHIC = new Thread(gameFrame);
-        GRAPHIC.start();
+
 
         //serverListener.start();
         System.out.println("AClient running");
-        gameFrame.launch();
+        //gameFrame.launch();
     }
 
     public void performAction(String s) {
@@ -29,7 +28,7 @@ public class AClient {
             s = s.substring(5);
             switch (command) {
                 case START:
-                    gameFrame.startGame(s);
+                    gameFrame.startGame();
                     break;
 
                     // Check attempt from other player
@@ -57,10 +56,12 @@ public class AClient {
     }
 
     public void sendMessage(String s) {
-        ;
+        System.out.println("PLEASE DO NOT USE THIS METHOD!!!!!!!!!!!");
     }
 
     /**
+     *
+     *
      * Sends to the automata player the attempt of the human player to be checked.
      * H is for Human
      *
@@ -71,11 +72,21 @@ public class AClient {
     }
 
     /**
+     *
+     *
      * Send the result of the attempt back to the automata.
      *
      * @param missOrTouch MISS or TOUCH
      */
     public void resultOfAttempt(String missOrTouch) {
         gameFrame.resultOfAttempt(missOrTouch);
+    }
+
+    public void startGame() {
+        gameFrame.startGame();
+    }
+
+    public void printGrid() {
+        gameFrame.printGrid();
     }
 }

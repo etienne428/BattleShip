@@ -33,9 +33,16 @@ public class BSMain {
             port = 42824;
         }
         if (numberOfPlayer == 1) {
-            server = new Server1Player(port);
-            Thread serverThread = new Thread(server);
-            serverThread.start();
+            while (true) {
+                try {
+                    server = new Server1Player(port);
+                    Thread serverThread = new Thread(server);
+                    serverThread.start();
+                } catch (IOException e) {
+                    System.out.println("Port already used, next try with " + ++port);
+                }
+                break;
+            }
         } else if (numberOfPlayer == 2) {
             if (setServer(port)) {
                 Thread serverThread = new Thread(server);
@@ -45,7 +52,7 @@ public class BSMain {
         try {
             //server.runServer();
 
-            System.out.println("Jetzt isch los");
+            //System.out.println("Jetzt isch los");
             new Client("localhost",port, "");
             //Game game = new Game();
             //game.run();

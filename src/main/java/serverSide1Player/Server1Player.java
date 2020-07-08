@@ -16,14 +16,10 @@ public class Server1Player extends Server implements Runnable {
 
 
 
-    public Server1Player(int port) {
+    public Server1Player(int port) throws IOException {
         this.port = port;
         game = new Game1P(this);
-        try {
-            serverSocket = new ServerSocket(port);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        serverSocket = new ServerSocket(port);
     }
 
     public void run() {
@@ -32,7 +28,6 @@ public class Server1Player extends Server implements Runnable {
             Socket clientSocket = serverSocket.accept();
             player = new ClientControl1Player(this, clientSocket, game);
             player.start();
-            System.out.println("I'm here");
         } catch (IOException e) {
             e.printStackTrace();
         }

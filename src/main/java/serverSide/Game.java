@@ -3,7 +3,6 @@ package serverSide;
 import serverSide1Player.ClientControl1Player;
 
 public abstract class Game {
-    public abstract void setAutomataBoats(String boats);
 
     public abstract void addPlayer(ClientControl1Player clientControl1Player);
 
@@ -17,7 +16,7 @@ public abstract class Game {
 
     public abstract void sendResultToA(String s);
 
-    public abstract void sendResultToH();
+    public abstract void sendResultToH(String missOrTouch);
 
-    public abstract void setResultOfAttemptH(String missOrTouch);
+    public abstract void printAGrid();
 }

@@ -13,12 +13,11 @@ import java.net.Socket;
 public class ClientControl1Player extends ClientControl {
 
 
-    private AClient autoClient = null;
-    private String name;
-    private Socket socket = null;
-    private Server server = null;
+    private final String name;
+    private final Socket socket;
+    private final Server server;
     private OutputStream outputStream;
-    private Game1P game;
+    private final Game1P game;
 
     public ClientControl1Player(Server server, Socket clientSocket, Game1P game) {
         this.server = server;
@@ -29,7 +28,7 @@ public class ClientControl1Player extends ClientControl {
     }
 
     public void start() {
-        System.out.println("Start client " + server.getPort());
+        //tem.out.println("Start client " + server.getPort());
 
         String command;
         try {
@@ -43,7 +42,7 @@ public class ClientControl1Player extends ClientControl {
                 if (command == null) {
                     continue;
                 }
-                System.out.println("Received " + command);
+                //System.out.println("Received " + command);
                 executeCommand(command);
             }
         } catch (IOException e) {
@@ -52,7 +51,7 @@ public class ClientControl1Player extends ClientControl {
     }
 
     public void executeCommand(String s) {
-        System.out.println("Server received " + s);
+        //System.out.println("Server received " + s);
         try {
             CommandToServer command = CommandToServer.valueOf(Parser.getCommand(s));
             s = Parser.getElement(s);
@@ -72,7 +71,6 @@ public class ClientControl1Player extends ClientControl {
 
                 case LAUNC:
                     // Result of an attempt : MISS or TOUCH
-                    game.sendResultToH();
                     game.sendResultToA(s);
                     break;
 
@@ -85,7 +83,8 @@ public class ClientControl1Player extends ClientControl {
                     break;
 
                 case PRINT:
-                    server.broadcast("PRINT ");
+                    //server.broadcast("PRINT ");
+                    game.printAGrid();
                     break;
 
             }

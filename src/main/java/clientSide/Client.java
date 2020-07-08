@@ -31,7 +31,7 @@ public class Client {
 
             consoleListener.start();
             serverListener.start();
-            System.out.println("Client running");
+            System.out.println("Client running\n\n");
             gameFrame.launch(name);
         } catch (IOException e) {
             e.printStackTrace();
@@ -42,13 +42,13 @@ public class Client {
     }
 
     public void performAction(String s) {
-        System.out.println("Client Received " + s);
+        //System.out.println("Client Received " + s);
         try {
             CommandToClient command = CommandToClient.valueOf(Parser.getCommand(s));
             s = s.substring(5);
             switch (command) {
                 case START:
-                    gameFrame.startGame(s);
+                    gameFrame.startGame();
                     break;
                 case ATEMP:
                     gameFrame.attempt(s);

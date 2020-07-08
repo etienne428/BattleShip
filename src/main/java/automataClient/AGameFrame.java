@@ -6,26 +6,30 @@ import serverSide.Game;
 
 import java.util.Random;
 
-public class AGameFrame implements Runnable {
+public class AGameFrame {
 
     private final AClient client;
     private final Game game;
-    private AWaterGrid myGrid;
+    private final AWaterGrid myGrid;
     private AWaterGrid opponentGrid;
     private final Random random = new Random();
 
+    /**
+     * The equivalent of GameFrame, interface between AClient and AWaterGrid.
+     *
+     * @param client the related Client
+     * @param game   the server part, used as interface
+     */
     public AGameFrame(AClient client, Game game) {
         this.client = client;
         this.game = game;
-    }
-
-    public void launch() {
         myGrid = new AWaterGrid(client, this, true);
         setBoatOnDefault();
-        game.setAutomataBoats(myGrid.getBoatsPlacement());
-        game.setNextAttempt(myGrid.getNextAttempt());
     }
 
+    /**
+     *
+     */
     void setBoatOnDefault() {
         for (int i = 0; i < 5; i++) {
             boolean northSouth = random.nextBoolean();
@@ -43,15 +47,17 @@ public class AGameFrame implements Runnable {
                 //System.out.println("north " + northSouth + ", line " + (char) line + ", column " + column);
                 myGrid.addBoat((char) line, column, SetOfBoats.getLengths()[i], northSouth);
             } catch (BoatNotSetException e) {
+                i--;
                 //System.out.println(e.getMessage());
 
             }
         }
-        myGrid.printBoard();
-        game.setAutomataBoats(myGrid.getBoatsPlacement());
+        //myGrid.printBoard();
     }
 
     /**
+     *
+     *
      * Check attempt from other player.
      *
      * @param s One letter and one int for the grid coordinate
@@ -60,47 +66,41 @@ public class AGameFrame implements Runnable {
         myGrid.attemptCheck(s);
     }
 
-    @Override
-    public void run() {
-
-    }
-
-    public void startGame(String message) {
-        myGrid.startGame();
-
+    /**
+     *
+     *
+     * Start game, initiate opponentGrid and send a first attempt.
+     */
+    public void startGame() {
         opponentGrid = new AWaterGrid(client, this, false);
-        String[] tiles = message.split(" ");
-
-        for (int i = 0; i < SetOfBoats.getLengths().length; i++) {
-            String t = tiles[i];
-            try {
-                if (t.length() != 3) {
-                    throw new BoatNotSetException(t + " is not a proper tile encoding");
-                }
-                opponentGrid.addBoat( t.charAt(0), t.charAt(1), SetOfBoats.getLengths()[i++],
-                        t.substring(2).equalsIgnoreCase("N"));
-            } catch (BoatNotSetException e) {
-                System.out.println(i-- + " has to be set better");
-                //e.printStackTrace();
-            }
-        }
+        game.setNextAttempt(myGrid.getNextAttempt());
     }
 
     /**
-     * Send the result of the attempt back.
+     *
+     *
+     * Store the result of this automata back.
      *
      * @param missOrTouch MISS or TOUCH
      */
     public void resultOfAttempt(String missOrTouch) {
-        opponentGrid.resultOfAttempt(missOrTouch);
+        myGrid.resultOfAttempt(missOrTouch);
     }
 
     /**
+     *
+     *
      * Sends the result of the other player's attempt to game.java.
      *
      * @param missOrTouch MISS or TOUCH
      */
     public void resultOfAttemptO(String missOrTouch) {
-        game.setResultOfAttemptH(missOrTouch);
+        game.sendResultToH(missOrTouch);
+        game.setNextAttempt(myGrid.getNextAttempt());
+    }
+
+    public void printGrid() {
+        myGrid.printBoard();
+        opponentGrid.printBoard();
     }
 }
