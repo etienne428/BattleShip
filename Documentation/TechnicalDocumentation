@@ -18,34 +18,22 @@ This document should act as a guide to all curious programmers and developers to
 
 # 1.2 Relation to other documentation
 
-The projects required and preferred features can be found in the specification book, [here](https://github.com/swissmathmodel/jabref/blob/feature/docs/sweng/Pflichtenheft).
+The projects required and preferred features can be found in the System Specifications doc, [here](https://github.com/etienne428/BattleShip/blob/main/Documentation/TechniqualDocumentation).
 
 # 2. System Overview
 
-This feature is an enhancement to the existing open source bibliography tool, JabRef.
-With the vision to add better mathematics classification recognition capabilities to Jabref, this feature will add Mathematics Subject Classification (MSC) keyword recognition as tooltips to entry keywords.
-To use this feature, the user must:
-
-* Activate the feature in JabRefPreferences.java so that the keyRecForMathClassF boolean is TRUE (FALSE to deactivate)
-* Create a new bib entry
-* Type in an MSC keyword into the Optional Fields tab (for example, "01A10")
-* The bib entry with the MSC keyword is created
-* If the feature succeeds: When the user hovers over the keyword with the cursor, a tooltip with the mathematics subject should appear (for "01A10" this would be "History of mathematics in Paleolithic and Neolithic times")
-* If the keyword is not recognized, or is not that of an MSC subject, no tooltip will appear
+This project has for main purpose to make me learn about Android Store and to create the most complex App I can, in my free time.
+To play it, the user must only download the App from the Google Play store, and that as soon as it will be available.
 
 # 3. Design Goals
 
-* The design must correspond to the JabRef coding conventions.
-* The design must not change the existing design of JabRef
-* The design must be tested with a large range of keywords to test accuracy
-* The design must be modular
+* The design must be tested for accuracy
 * The design must be well-documented
 * The design should be focused on accuracy
 * The design should work efficiently (quick response) for the user
-* The design should allow for future enhancement - direct conversion, other MSC versions
-* The design should allow for minimal maintenance
-* The design should result in minimal development efforts
+* The design should allow for future enhancement
 
+//////////////////////////// to be updated
 # 4. System Behavior
 
 This feature has the sole purpose of adding Mathematics Subject Classification 2010 (MSC) keyword recognition to Jabref, through tooltips that display the associated MSC subject.
