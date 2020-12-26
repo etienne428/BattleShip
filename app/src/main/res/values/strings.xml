@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">BattleShip</string>
-    <string name="my_grid">My Grid</string>
+    <string name="my_grid">My grid</string>
     <string name="welcome_to_battleship">Welcome to BattleShip!</string>
     <string name="launch_a_new_game">Launch a new game</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="welcome_text">Welcome to BattleShip. Choose a tile to target</string>
+    <string name="choose_language">Choose language</string>
+    <string name="rotate">Rotate</string>
+    <string name="set_boat">Confirm</string>
 </resources>
