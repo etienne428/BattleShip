@@ -9,8 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GridTry">
-        <activity android:name="com.example.battleShip.model.GameActivity" />
-        <activity android:name="com.example.battleShip.MainActivity">
+        <activity android:name=".model.SetBoatsActivity"/>
+        <activity android:name=".model.GameActivity" />
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
