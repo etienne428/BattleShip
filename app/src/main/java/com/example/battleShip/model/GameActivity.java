@@ -52,7 +52,7 @@ public class GameActivity extends AppCompatActivity {
 
         // Find the view that gives info to the player
         info = findViewById(R.id.instructions_text);
-        writeInstruction("Welcome to BattleShip. Choose a tile to target");
+        writeInstruction(getString(R.string.welcome_text));
 
         // Instantiate the computer player and set its boats
         auto = new AutoPlayer(this, columns, rows);

@@ -26,6 +26,7 @@ public class ViewRecyclerAdapter extends RecyclerView.Adapter<ViewRecyclerAdapte
     private final TileState[] myTiles;
     private final LayoutInflater inflater;
     private final GameActivity context;
+    private ItemClickListener mClickListener;
     private ViewHolder viewHolder;
 
     // data is passed into the constructor
@@ -127,7 +128,7 @@ public class ViewRecyclerAdapter extends RecyclerView.Adapter<ViewRecyclerAdapte
     /**
      * Stores and recycles views as they are scrolled off screen
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         // The view for one tile
         public TextView myTextView;
@@ -141,6 +142,12 @@ public class ViewRecyclerAdapter extends RecyclerView.Adapter<ViewRecyclerAdapte
             super(itemView);
             myTextView = itemView.findViewById(R.id.tile);
             myTextView.setTextSize(14);
+            myTextView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 
@@ -177,5 +184,15 @@ public class ViewRecyclerAdapter extends RecyclerView.Adapter<ViewRecyclerAdapte
             sb.append("|\n|");
         }
         Log.i("PRINT_VIEW_RECYCLER", sb.toString());
+    }
+
+    // allows clicks events to be caught
+    void setClickListener(ViewRecyclerAdapter.ItemClickListener itemClickListener) {
+        this.mClickListener = itemClickListener;
+    }
+
+    // parent activity will implement this method to respond to click events
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
     }
 }
