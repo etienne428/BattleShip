@@ -1,0 +1,89 @@
+---
+layout: default
+title : Technical Documentation
+---
+# Technical Documentation
+
+| Version | Project Name | Author(s)  | Status | Date | Comment |
+| ------- | ----- | ------ | ------ | ----- | --------- |
+|  0.1    |  Battleship   | Etienne Mettaz | in early stage | 26.12.2020 | |
+
+
+# 1 Introduction
+
+# 1.1 Purpose
+
+This document denotes the key technical features this project aims to achieve, programming a game to play BattleShip
+This document should act as a guide to all curious programmers and developers to understand the design and functionality of this app.
+
+# 1.2 Relation to other documentation
+
+The projects required and preferred features can be found in the specification book, [here](https://github.com/swissmathmodel/jabref/blob/feature/docs/sweng/Pflichtenheft).
+
+# 2. System Overview
+
+This feature is an enhancement to the existing open source bibliography tool, JabRef.
+With the vision to add better mathematics classification recognition capabilities to Jabref, this feature will add Mathematics Subject Classification (MSC) keyword recognition as tooltips to entry keywords.
+To use this feature, the user must:
+
+* Activate the feature in JabRefPreferences.java so that the keyRecForMathClassF boolean is TRUE (FALSE to deactivate)
+* Create a new bib entry
+* Type in an MSC keyword into the Optional Fields tab (for example, "01A10")
+* The bib entry with the MSC keyword is created
+* If the feature succeeds: When the user hovers over the keyword with the cursor, a tooltip with the mathematics subject should appear (for "01A10" this would be "History of mathematics in Paleolithic and Neolithic times")
+* If the keyword is not recognized, or is not that of an MSC subject, no tooltip will appear
+
+# 3. Design Goals
+
+* The design must correspond to the JabRef coding conventions.
+* The design must not change the existing design of JabRef
+* The design must be tested with a large range of keywords to test accuracy
+* The design must be modular
+* The design must be well-documented
+* The design should be focused on accuracy
+* The design should work efficiently (quick response) for the user
+* The design should allow for future enhancement - direct conversion, other MSC versions
+* The design should allow for minimal maintenance
+* The design should result in minimal development efforts
+
+# 4. System Behavior
+
+This feature has the sole purpose of adding Mathematics Subject Classification 2010 (MSC) keyword recognition to Jabref, through tooltips that display the associated MSC subject.
+The feature's behavior follows the following:
+* When a user activates the feature in JabRefPreferences and creates a new bib entry containing an MSC keyword, the correct MSC subject is shown in a Tooltip.
+* The system allows the tooltip to appear if a user hovers over an MSC keyword, showing the mathematics subject classification from a database of all MSC keywords and subjects.
+* The system allows the tooltip to constantly appear for the entire time the user hovers over an MSC keyword, showing the entire length of the MSC subject.
+* The system is capable of letting the tooltip appear in less than one second after the user hovers over a keyword, online and offline.
+* The system allows keywords to be searchable and can distinguish among multiple keywords added for one entry.
+* The system will not recognize false or incorrect keywords, so no tooltip will appear.
+* The feature does not show up when disabled.
+
+# 5. Design
+
+The corresponding design is integrated into JabRef, through the activation of a GUI tooltip and eventual MSC database. The design is further specified in the following UML and sequence diagrams, as well as OCL constraints.
+
+## 5.1 Static
+
+This UML class diagram shows the Java classes and methods involved in this feature. 
+* Static UML found ![here](https://github.com/swissmathmodel/jabref/blob/feature/docs/sweng/StaticUML.pdf)
+
+## 5.2 Dynamic
+
+These UML sequence diagrams show the dynamic components of this feature, as expected from our specified use cases.
+* Dynamic UMLs for Use Case 1 ![here](https://github.com/swissmathmodel/jabref/blob/feature/docs/sweng/UML_Use_Case_1.pdf)
+* Dynamic UMLs for Use Case 2 ![here](https://github.com/swissmathmodel/jabref/blob/feature/docs/sweng/UML_Use_Case_2.pdf)
+* Dynamic UMLs for Use Cases 6 & 7 ![here](https://github.com/swissmathmodel/jabref/blob/feature/docs/sweng/UML_Use_Case_6_and_7.pdf)
+* Dynamic UMLs for Listener feature ![here](https://github.com/swissmathmodel/jabref/blob/feature/docs/sweng/UML_Dynamic.pdf)
+
+## 5.3 Logic
+
+The logical aspects and constraints of this feature are defined by the following OCL constraints:
+
+* **context** JabRefPreferences::JabRefPreferences() **inv:** self.keyRecForMathClassF = true
+* **context** KeyWordsEditor::getMSCDefinition(d:String) **inv:** self.contains->exists(mscCode)
+* **context** KeyWordsEditor::getMSCDefinition(d:String) **inv:** self.contains->isUnique(mscCode)
+* **context** KeyWordsEditor::handleListener(d:String) **inv:** self.text != null
+* **context** KeyWordsEditor::KeyWordsEditor() **inv:** textInputControl.textProperty().getValue() != null
+* **context** GeneralTabViewModel::storeSettings() **pre:** keyRecForMathClassF.getValue() != null
+* **context** KeyWordsEditor::handleListener(d:String) **inv:** self.newValue->exists(mscCode)
+* **context** GeneralTabView::initialize() **inv:** !keyRecForMathClassF.selectedProperty().bindBidirectional(viewModel.getValkeyRecForMathClassF()).isEmpty()

@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">BattleShip</string>
+    <string name="my_grid">My Grid</string>
+    <string name="welcome_to_battleship">Welcome to BattleShip!</string>
+    <string name="launch_a_new_game">Launch a new game</string>
+    <!-- TODO: Remove or change this placeholder text -->
+</resources>

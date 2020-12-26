@@ -1,0 +1,149 @@
+# System Specifications 
+#####  This file is based on the Template for my lecture Software engineering at Basel University
+
+
+| Version | Author | Status | Datum | Comments |
+| ------- | -----  | ------ | ----- | --------- |
+|  0.1    |  Etienne Mettaz  | in development | 26.12.2020 | |
+
+
+## 1. Vision and Goals
+Description of the vision and goals that should be solved through the implementation of the system.
+
+* /V10/ Develop my abilities to achieve big projects and to write Apps with Android studio
+* /V20/ Have a way to share my competences in coding to my family and friends
+* /G10/ Write and publish a running app
+* /G20/ Master the basics of android studio
+* /G30/ Complete my first personal important project
+
+
+
+## 2. General Conditions and Stakeholders
+
+BDescription of organizational framework: areas of application, target groups, operating conditions
+ 
+* /S10/ People who want to casually play this game
+* /S20/ Developers who want to take a look at this project, find improvements and learn with it
+* /S30/ Myself
+* /C10/ Project is a game written in java
+* /C20/ Project runs on android devices and is downloadable from Google Play
+* /C30/ Project is capable of running multi-year
+* /C40/ Project is completed by a group of four computer science students
+* /C50/ Project is updated with new functionalities
+* /C60/ Project is an source
+
+## 3. Context and Overview
+Definition of the relevant system environment (context) and system overview
+
+* /O10/ Project is written in Java
+* /O20/ Project is sourced on GitHub
+
+
+## 4. Functional Requirements
+The core functionality of the system is to be described from the client's point of view on the highest abstraction level.
+
+* /F10/ The game is playable
+* /F20/ The game has a one player mode
+* /F30/ The computer plays well enough for both player and computer to be able to win
+* /F40/ The game has an online version for 2 players on different devices
+* /F50/ The game is multilingual
+* /F60/ The game has a multi player mode, with one grid containing ships from all players
+* /F70/ The multi player mode can be played with 0 or more computer players
+* /F80/ The multi player mode offers the possibility to pla in teams
+* /F90/ The grid size can be chosen by the player
+* /F100/ The game contains an AI to choose tiles to target
+* /F110/ The game contains different difficulties modes
+* /F120/ The game is available offline
+
+The functional requirements can be determined with the help of use cases. The use cases should be described in detail in Appendix A.
+
+
+## 5. Non-functional Requirements
+A quality target determination for the system should be made using a table
+
+| System Quality | very good | good | normal | not relevant |
+| -------------  | --------- | ---- | ------ | ------------ |
+| Functionality |            |  x   |        |       |
+| Reliability   |            |      |   x    |       |
+| Usability     |            |  x   |        |       |
+| Efficiency    |            |  x   |        |       |
+| Maintainability |          |  x   |        |       |
+| Portability   |            |      |   x    |       |
+
+Individual requirements can be defined as follows:
+
+## 6. Acceptance Criteria
+Acceptance criteria determine how requirements can be checked for their implementation before acceptance
+
+* /A10/ The game is played with no unwanted behaviour
+* /A20/ The game is efficient and fun
+* /A30/ The feature and its functional requirements pass all manual unit tests
+* /A40/ The feature and functional changes are documented in the source code via Javadoc
+
+## 7. Glossary
+*Grid*: A matrix representing a portion of see where lies the ships of one (or more) player. 
+*Board*: The graphical representation of a grid.
+*Tile*: A single element of the grid
+
+# Appendix
+
+## Appendix A. Use-cases
+
+### Use Case 1:
+* Name - *App opening*
+* Actors - *Android device, user*
+* Prerequisite - *user has an android device, app is downloaded and installed*
+* Standard flow -
+    * User opens the App
+* Result (Success) - *The App opens, shows a welcome text and displays possibilities to change language, choose game mode and launch game*
+* Result (Failure) - *The App closes and an error is reported by the OS*
+
+### Use Case 2:
+* Name - *Launch 2 players Mode*
+* Actors - *Android device, user*
+* Prerequisite - *Use case 1 completed*
+* Standard flow -
+    * User choose a language
+    * User choose either single player mode or online 2 player mode
+    * User push "Launch a new Game" button
+* Result (Success) - *New activity starts with one grid, two buttons in the bottom left
+ to change boat orientation and confirm boat setup and enough information in a textView 
+ in the bottom right corner to understand what to do*
+* Result (Failure) - *A failure message is displayed and player can try again*
+
+### Use Case 3:
+* Name - *Set Boat 2 players*
+* Actors - *Android device, user*
+* Prerequisite - *Use Case 2*
+* Standard flow -
+    * User click a tile in the board
+    * The next boat to be set is shown in the grid
+    * If the user click the "Rotate" button, the boat is shown in the other direction
+    * If the user click another Tile, boat is set in that new position
+    * When the user click the "Confirm" button, boat is set and next boat is to be set
+    * When the last boat is set, game begins 
+* Result (Success) - *Boats are set*
+* Result (Failure) - *The game can't be played*
+
+### Use Case 4:
+* Name - *2 players game*
+* Actors - *Android device, user*
+* Prerequisite - *Use Case 4*
+* Standard flow -
+    * The User choose one Tile at a time, until he or its opponent wins
+    * The main (top) Board shows the Tiles that has been targeted with a color and letter code
+    * The bottom Board shows the state if the player's own ship with its opponents attempts
+* Result (Success) - *The game is played*
+* Result (Failure) - *The game can't be played*
+
+
+Next Use cases will be added for further functionality. Here's the template
+### Use Case :
+* Name - * *
+* Actors - *Android device, user*
+* Prerequisite - * *
+* Standard flow -
+    * 
+    * 
+* Result (Success) - * *
+* Result (Failure) - * *
