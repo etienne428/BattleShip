@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Bataille Navale</string>
+    <string name="welcome_to_battleship">Bienvenue pour cette Bataille Navale</string>
+    <string name="launch_a_new_game">Commencer</string>
+    <string name="welcome_text">Ici commence la bataille. Choisit ta prochaine cible!</string>
+    <string name="my_grid">Ma grille</string>
+    <string name="choose_language">Choisir la langue</string>
+    <string name="rotate">Changer la direction</string>
+    <string name="set_boat">Confirmer</string>
+</resources>
