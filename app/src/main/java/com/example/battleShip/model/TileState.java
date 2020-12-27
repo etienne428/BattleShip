@@ -53,6 +53,23 @@ public enum TileState {
         this.touched = touched;
     }
 
+    public static TileState setClear(Boat boat) throws TileException {
+        switch (boat) {
+            case CARRIER:
+                return CARRIER_CLEAR;
+            case BATTLESHIP:
+                return BATTLESHIP_CLEAR;
+            case DESTROYER:
+                return DESTROYER_CLEAR;
+            case SUBMARINE:
+                return SUBMARINE_CLEAR;
+            case PATROL:
+                return PATROL_CLEAR;
+            default:
+                    throw new TileException(boat.ordinal());
+        }
+    }
+
     public int getStatus() {
         return status;
     }

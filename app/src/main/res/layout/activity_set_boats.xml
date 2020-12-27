@@ -51,33 +51,33 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <Button
                 android:id="@+id/rotate_button"
-                style="?android:attr/buttonBarButtonStyle"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="4dp"                android:layout_width="match_parent"
+                android:layout_marginBottom="4dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="rotate"
                 android:text="@string/rotate"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
             <Button
                 android:id="@+id/set_button"
-                style="?android:attr/buttonBarButtonStyle"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="4dp"           android:layout_width="match_parent"
+                android:layout_marginBottom="4dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="setBoat"
-                android:text="@string/"
+                android:text="@string/set_boat"
                 android:textSize="16sp" />
 
 

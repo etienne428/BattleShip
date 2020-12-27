@@ -46,8 +46,13 @@ public class SetBoatsRecyclerAdapter extends RecyclerView.Adapter<SetBoatsRecycl
     // binds the data to the TextView in each cell
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.myTextView.setText(String.valueOf(myTiles[position].getCharacter()));
-        holder.myTextView.setBackgroundColor(Color.GREEN);
+        char tile = myTiles[position].getCharacter();
+        holder.myTextView.setText(String.valueOf(tile));
+        if (tile == ' ') {
+            holder.myTextView.setBackgroundColor(Color.BLUE);
+        } else {
+            holder.myTextView.setBackgroundColor(Color.GREEN);
+        }
     }
 
     // total number of cells
@@ -88,7 +93,7 @@ public class SetBoatsRecyclerAdapter extends RecyclerView.Adapter<SetBoatsRecycl
 
 
     // allows clicks events to be caught
-    void setClickListener(ItemClickListener itemClickListener) {
+    public void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
 

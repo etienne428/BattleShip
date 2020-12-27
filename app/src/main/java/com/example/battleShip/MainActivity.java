@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.battleShip.model.GameActivity;
+import com.example.battleShip.model.SetBoatsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
             "com.example.android.battleShip.extra.COLUMNS";
     public static final String EXTRA_ROWS =
             "com.example.android.battleShip.extra.ROWS";
+    public static final String BOAT_SETUP =
+            "com.example.android.battleShip.extra.SETUP";
 
     private int columns;
     private int rows;
@@ -29,13 +32,23 @@ public class MainActivity extends AppCompatActivity {
 
         columns = 10;
         rows = 12;
+        if (savedInstanceState != null) {
+            columns = savedInstanceState.getInt(EXTRA_COLUMNS);
+            rows = savedInstanceState.getInt(EXTRA_ROWS);
+        }
+
         Button launchGame = findViewById(R.id.launch_game);
         launchGame.setOnClickListener( o -> {
             Intent intent = new Intent(this,
-                    GameActivity.class);
+                    SetBoatsActivity.class);
             intent.putExtra(EXTRA_COLUMNS, columns);
             intent.putExtra(EXTRA_ROWS, rows);
             startActivity(intent);
+//            Intent intent = new Intent(this,
+//                    GameActivity.class);
+//            intent.putExtra(EXTRA_COLUMNS, columns);
+//            intent.putExtra(EXTRA_ROWS, rows);
+//            startActivity(intent);
         });
     }
 
@@ -43,5 +56,12 @@ public class MainActivity extends AppCompatActivity {
         Intent languageIntent = new
                 Intent(Settings.ACTION_LOCALE_SETTINGS);
         startActivity(languageIntent);
+    }
+
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the state of the fragment (true=open, false=closed).
+        savedInstanceState.putInt(EXTRA_COLUMNS, columns);
+        savedInstanceState.putInt(EXTRA_ROWS, rows);
+        super.onSaveInstanceState(savedInstanceState);
     }
 }
