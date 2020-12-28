@@ -44,8 +44,8 @@ public class GameActivity extends AppCompatActivity {
 
         // Store column and rows from main (not operational yet)
         Intent intent = getIntent();
-        columns = Integer.parseInt(intent.getStringExtra(MainActivity.EXTRA_COLUMNS));
-        rows = Integer.parseInt(intent.getStringExtra(MainActivity.EXTRA_ROWS));
+        columns = intent.getIntExtra(MainActivity.EXTRA_COLUMNS, 10);
+        rows = intent.getIntExtra(MainActivity.EXTRA_ROWS, 12);
 
         setEnemyGrid();
         setMyGrid();

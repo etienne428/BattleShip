@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -37,18 +38,23 @@ public class MainActivity extends AppCompatActivity {
             rows = savedInstanceState.getInt(EXTRA_ROWS);
         }
 
-        Button launchGame = findViewById(R.id.launch_game);
-        launchGame.setOnClickListener( o -> {
+        Button beginGame = findViewById(R.id.begin_game);
+        beginGame.setOnClickListener( o -> {
             Intent intent = new Intent(this,
                     SetBoatsActivity.class);
             intent.putExtra(EXTRA_COLUMNS, columns);
             intent.putExtra(EXTRA_ROWS, rows);
             startActivity(intent);
-//            Intent intent = new Intent(this,
-//                    GameActivity.class);
-//            intent.putExtra(EXTRA_COLUMNS, columns);
-//            intent.putExtra(EXTRA_ROWS, rows);
-//            startActivity(intent);
+        });
+        Button launchGame = findViewById(R.id.launch_game);
+        launchGame.setOnClickListener( o -> {
+
+            Intent intent = new Intent(this,
+                    GameActivity.class);
+            Log.e("NULL", "columns = " + columns + ", rows = " + rows);
+            intent.putExtra(EXTRA_COLUMNS, columns);
+            intent.putExtra(EXTRA_ROWS, rows);
+            startActivity(intent);
         });
     }
 
