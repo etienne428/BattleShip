@@ -103,10 +103,10 @@ public class ViewRecyclerAdapter extends RecyclerView.Adapter<ViewRecyclerAdapte
     public void onBindViewHolder(@NonNull ViewRecyclerAdapter.ViewHolder holder, int position) {
         holder.myTextView.setText(String.valueOf(myTiles[position].getCharacter()));
         try {
-            Log.i("COLOR2_VIEW", "From bind view : " + position + " = pos, color = " + myTiles[position].getColor());
+//            Log.i("COLOR2_VIEW", "From bind view : " + position + " = pos, color = " + myTiles[position].getColor());
             if (position == context.getLastAutoTile()) {
-                Log.i("COLOR2_VIEW", "color is " + myTiles[position].getColorLast()
-                        + " instead of " + myTiles[position].getColor());
+//                Log.i("COLOR2_VIEW", "color is " + myTiles[position].getColorLast()
+//                        + " instead of " + myTiles[position].getColor());
                 holder.myTextView.setBackgroundColor(myTiles[position].getColorLast());
             } else {
                 holder.myTextView.setBackgroundColor(myTiles[position].getColor());

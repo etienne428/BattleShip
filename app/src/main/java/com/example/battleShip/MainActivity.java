@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
             "com.example.android.battleShip.extra.COLUMNS";
     public static final String EXTRA_ROWS =
             "com.example.android.battleShip.extra.ROWS";
-    public static final String BOAT_SETUP =
+    public static final String EXTRA_SETUP =
             "com.example.android.battleShip.extra.SETUP";
 
     private int columns;
@@ -46,16 +46,16 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(EXTRA_ROWS, rows);
             startActivity(intent);
         });
-        Button launchGame = findViewById(R.id.launch_game);
-        launchGame.setOnClickListener( o -> {
-
-            Intent intent = new Intent(this,
-                    GameActivity.class);
-            Log.e("NULL", "columns = " + columns + ", rows = " + rows);
-            intent.putExtra(EXTRA_COLUMNS, columns);
-            intent.putExtra(EXTRA_ROWS, rows);
-            startActivity(intent);
-        });
+//        Button launchGame = findViewById(R.id.launch_game);
+//        launchGame.setOnClickListener( o -> {
+//
+//            Intent intent = new Intent(this,
+//                    GameActivity.class);
+//            Log.e("NULL", "columns = " + columns + ", rows = " + rows);
+//            intent.putExtra(EXTRA_COLUMNS, columns);
+//            intent.putExtra(EXTRA_ROWS, rows);
+//            startActivity(intent);
+//        });
     }
 
     public void chooseLanguage(View view) {

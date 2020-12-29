@@ -68,8 +68,8 @@ public class AttackRecyclerAdapter extends RecyclerView.Adapter<AttackRecyclerAd
     public void onBindViewHolder(@NonNull AttackRecyclerAdapter.ViewHolder holder, int position) {
         holder.myTextView.setText(String.valueOf(autoTiles[position].getCharacter()));
         try {
-            Log.i("COLOR3_ATT", "color is " + autoTiles[position].getColorLast()
-                    + " instead of " + autoTiles[position].getColor());
+//            Log.i("COLOR3_ATT", "color is " + autoTiles[position].getColorLast()
+//                    + " instead of " + autoTiles[position].getColor());
             if (position == context.getLastPlayersTile()) {
                 holder.myTextView.setBackgroundColor(autoTiles[position].getColorLast());
             } else {
@@ -120,7 +120,7 @@ public class AttackRecyclerAdapter extends RecyclerView.Adapter<AttackRecyclerAd
             int pos = getAdapterPosition();
             try {
                 // Check if result is a success, store the boat (or see) touched
-                Log.e("TILE_ERROR_ATTACK", "To check, pos = " + pos);
+//                Log.e("TILE_ERROR_ATTACK", "To check, pos = " + pos);
                 Boat attempt = context.checkPlayerAttempt(pos);
                 if (attempt != Boat.SEE) {
                     // Get the corresponding lL and add the new touched tile
@@ -141,10 +141,10 @@ public class AttackRecyclerAdapter extends RecyclerView.Adapter<AttackRecyclerAd
                         // Put boat back, if boat still floating
                         setOfBoat.put(attempt, reachedTiles);
                     }
-                    Log.e("TILE_ERROR_ATTACK", "Touched, pos = " + pos);
+//                    Log.e("TILE_ERROR_ATTACK", "Touched, pos = " + pos);
                     autoTiles[pos] = autoTiles[pos].setTouched();
                 } else {
-                    Log.e("TILE_ERROR_ATTACK", "Missed, pos = " + pos);
+//                    Log.e("TILE_ERROR_ATTACK", "Missed, pos = " + pos);
                     autoTiles[pos] = autoTiles[pos].setMissed();
                 }
             } catch (TileException e) {

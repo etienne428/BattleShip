@@ -18,6 +18,7 @@ import com.example.battleShip.gui.ViewRecyclerAdapter;
 import com.example.battleShip.utilis.BoatNotSetException;
 import com.example.battleShip.utilis.TileException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
@@ -36,6 +37,7 @@ public class GameActivity extends AppCompatActivity {
     private RecyclerView defendView;
     private int lastPlayersTile;
     private int lastAutoTile;
+    private ArrayList<Integer> boatSetUp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +48,20 @@ public class GameActivity extends AppCompatActivity {
         Intent intent = getIntent();
         columns = intent.getIntExtra(MainActivity.EXTRA_COLUMNS, 10);
         rows = intent.getIntExtra(MainActivity.EXTRA_ROWS, 12);
+        Bundle extra = intent.getBundleExtra(MainActivity.EXTRA_SETUP);
+
+        TileState[] myTiles = new TileState[columns * rows];
+        Arrays.fill(myTiles, TileState.SEE_CLEAR);
+
+        if (extra != null) {
+            boatSetUp = (ArrayList<Integer>) extra.getSerializable(MainActivity.EXTRA_SETUP);
+            Log.e("TAG", boatSetUp.toString() + " ");
+            setMyGrid(myTiles, true);
+        } else {
+            setMyGrid(myTiles, false);
+        }
 
         setEnemyGrid();
-        setMyGrid();
 
         // Find the view that gives info to the player
         info = findViewById(R.id.instructions_text);
@@ -62,12 +75,13 @@ public class GameActivity extends AppCompatActivity {
     /**
      * Instantiate player's own part
      */
-    private void setMyGrid() {
-        // Stores own grid
-        TileState[] myTiles = new TileState[columns * rows];
-        Arrays.fill(myTiles, TileState.SEE_CLEAR);
-        setBoatOnDefault(myTiles);
-
+    private void setMyGrid(TileState[] myTiles, boolean boatSaved) {
+        if (boatSaved) {
+            setBoats(myTiles);
+        } else {
+            setBoatOnDefault(myTiles);
+            Log.e("SET_BOAT", "set boats did not work");
+        }
         //
         defendView = findViewById(R.id.bottom_grid);
         defendAdapter = new ViewRecyclerAdapter(this, myTiles);
@@ -97,6 +111,7 @@ public class GameActivity extends AppCompatActivity {
     private void writeInstruction(String instruction) {
         info.setText(instruction);
     }
+
 
     public Boat checkComputerAttempt(int tile) throws TileException {
         lastAutoTile = tile;
@@ -144,9 +159,59 @@ public class GameActivity extends AppCompatActivity {
         Log.i("PRINT_MY_TILES", sb.toString());
     }
 
+    /**
+     * Set a boat.
+     * Extracted from setBoatOnDefault() for clarity.
+     *
+     * @param position      the position of the first tile.
+     * @param northSouth    the orientation.
+     * @param shipLength    the number of tiles for the ship.
+     * @param shipIndex     the index of the boat in the Boat enum.
+     * @param myTiles       the array of tiles.
+     */
+    private void setBoat(int position, boolean northSouth, int shipLength,
+                         int shipIndex, TileState[] myTiles) {
+
+        int gap = 1;
+        if (northSouth) {
+            gap *= columns;
+        }
+        // The TileState for the new boat
+        TileState state = null;
+        try {
+            state = TileState.getTile(10 * (shipIndex + 1));
+        } catch (TileException e) {
+            Log.e("ERROR", "Error by setting boat with index " + (10 * (shipIndex + 1)));
+        }
+        // Fill the tiles
+        for (int j = 0; j < shipLength; j++) {
+            myTiles[position + (j * gap)] = state;
+        }
+
+    }
 
     /**
      * Choose where the computer sets its boats.
+     *
+     * @param myTiles   the array of tiles.
+     */
+    private void setBoats(TileState[] myTiles) {
+        int position;
+        boolean northSouth;
+        for (int i = 0; i < 5; i++) {
+            position = boatSetUp.get(i * 2);
+            //orientation in the grid
+            northSouth = boatSetUp.get(i * 2 + 1) == 1;
+            // Number of tiles for the new boat
+            int shipLength = Boat.values()[i].getLength();
+            setBoat(position, northSouth, shipLength, i, myTiles);
+        }
+    }
+
+
+    /**
+     * Choose where the computer sets its boats.
+     *
      * For debugging purposes only, it is automatically set
      */
     void setBoatOnDefault(TileState[] myTiles) {
@@ -164,7 +229,7 @@ public class GameActivity extends AppCompatActivity {
                     int tile = line * columns + column;
                     boatCanBeSet(tile, shipLength, true, myTiles);
                     try {
-                        state =  TileState.getTile(10 * (i + 1));
+                        state = TileState.getTile(10 * (i + 1));
                         for (int j = 0; j < shipLength; j++) {
                             myTiles[tile + (j * columns)] = state;
                         }
