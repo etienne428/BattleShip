@@ -29,6 +29,7 @@ public class AttackRecyclerAdapter extends RecyclerView.Adapter<AttackRecyclerAd
     private final TileState[] autoTiles;
     private final LayoutInflater inflater;
     private final GameActivity context;
+    private ItemClickListener clickListener;
 
     /**
      * Data is passed into the constructor to be stored.
@@ -116,6 +117,8 @@ public class AttackRecyclerAdapter extends RecyclerView.Adapter<AttackRecyclerAd
 
         @Override
         public void onClick(View view) {
+            if (clickListener != null) clickListener.onItemClick(getAdapterPosition());
+/*
             // Get index in tiles[]
             int pos = getAdapterPosition();
             try {
@@ -151,7 +154,7 @@ public class AttackRecyclerAdapter extends RecyclerView.Adapter<AttackRecyclerAd
                 Log.e("TILE_ERROR_ATTACK", e.getMessage() + ", pos = " + pos);
             }
             onBindViewHolder(this, pos);
-            notifyDataSetChanged();
+            notifyDataSetChanged();*/
         }
 
         private void announceWinner() {
@@ -191,5 +194,15 @@ public class AttackRecyclerAdapter extends RecyclerView.Adapter<AttackRecyclerAd
             sb.append("|\n|");
         }
         Log.i("PRINT_AUTO", sb.toString());
+    }
+
+    // allows clicks events to be caught
+    public void setClickListener(AttackRecyclerAdapter.ItemClickListener itemClickListener) {
+        this.clickListener = itemClickListener;
+    }
+
+    // parent activity will implement this method to respond to click events
+    public interface ItemClickListener {
+        void onItemClick(int position);
     }
 }

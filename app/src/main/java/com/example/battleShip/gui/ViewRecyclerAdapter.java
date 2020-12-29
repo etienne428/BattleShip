@@ -18,7 +18,6 @@ import com.example.battleShip.utilis.TileException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-
 public class ViewRecyclerAdapter extends RecyclerView.Adapter<ViewRecyclerAdapter.ViewHolder> {
 
     // Stores each boat, with the list of already touched tiles
@@ -26,8 +25,6 @@ public class ViewRecyclerAdapter extends RecyclerView.Adapter<ViewRecyclerAdapte
     private final TileState[] myTiles;
     private final LayoutInflater inflater;
     private final GameActivity context;
-    private ItemClickListener mClickListener;
-    private ViewHolder viewHolder;
 
     // data is passed into the constructor
     public ViewRecyclerAdapter(GameActivity context, TileState[] tiles) {
@@ -91,8 +88,7 @@ public class ViewRecyclerAdapter extends RecyclerView.Adapter<ViewRecyclerAdapte
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.recyclerview_item, parent, false);
-        viewHolder = new ViewHolder(view);
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
     /**
@@ -101,7 +97,8 @@ public class ViewRecyclerAdapter extends RecyclerView.Adapter<ViewRecyclerAdapte
      */
     @Override
     public void onBindViewHolder(@NonNull ViewRecyclerAdapter.ViewHolder holder, int position) {
-        holder.myTextView.setText(String.valueOf(myTiles[position].getCharacter()));
+        char tile = myTiles[position].getCharacter();
+        holder.myTextView.setText(String.valueOf(tile));
         try {
 //            Log.i("COLOR2_VIEW", "From bind view : " + position + " = pos, color = " + myTiles[position].getColor());
             if (position == context.getLastAutoTile()) {
@@ -124,11 +121,10 @@ public class ViewRecyclerAdapter extends RecyclerView.Adapter<ViewRecyclerAdapte
         return myTiles.length;
     }
 
-
     /**
      * Stores and recycles views as they are scrolled off screen
      */
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         // The view for one tile
         public TextView myTextView;
@@ -142,12 +138,6 @@ public class ViewRecyclerAdapter extends RecyclerView.Adapter<ViewRecyclerAdapte
             super(itemView);
             myTextView = itemView.findViewById(R.id.tile);
             myTextView.setTextSize(14);
-            myTextView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 
@@ -184,15 +174,5 @@ public class ViewRecyclerAdapter extends RecyclerView.Adapter<ViewRecyclerAdapte
             sb.append("|\n|");
         }
         Log.i("PRINT_VIEW_RECYCLER", sb.toString());
-    }
-
-    // allows clicks events to be caught
-    void setClickListener(ViewRecyclerAdapter.ItemClickListener itemClickListener) {
-        this.mClickListener = itemClickListener;
-    }
-
-    // parent activity will implement this method to respond to click events
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
     }
 }

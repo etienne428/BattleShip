@@ -87,9 +87,9 @@ public class SetBoatsRecyclerAdapter extends RecyclerView.Adapter<SetBoatsRecycl
         }
     }
 
-    public TileState getItem(int position) {
-        return myTiles[position];
-    }
+//    public TileState getItem(int position) {
+//        return myTiles[position];
+//    }
 
 
     // allows clicks events to be caught

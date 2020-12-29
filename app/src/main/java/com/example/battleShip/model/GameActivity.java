@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,20 +24,20 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements AttackRecyclerAdapter.ItemClickListener {
 
-    private AttackRecyclerAdapter attackAdapter;
-    private RecyclerView attackView;
-
-    private TextView info;
     private int columns;
     private int rows;
-    private AutoPlayer auto;
 
+    private AttackRecyclerAdapter attackAdapter;
     private ViewRecyclerAdapter defendAdapter;
-    private RecyclerView defendView;
+
     private int lastPlayersTile;
     private int lastAutoTile;
+
+    private TextView info;
+    private AutoPlayer auto;
+
     private ArrayList<Integer> boatSetUp;
 
     @Override
@@ -83,7 +84,7 @@ public class GameActivity extends AppCompatActivity {
             Log.e("SET_BOAT", "set boats did not work");
         }
         //
-        defendView = findViewById(R.id.bottom_grid);
+        RecyclerView defendView = findViewById(R.id.bottom_grid);
         defendAdapter = new ViewRecyclerAdapter(this, myTiles);
         // deleted : ", defendView.getHeight() / rows"
         defendView.setAdapter(defendAdapter);
@@ -101,9 +102,10 @@ public class GameActivity extends AppCompatActivity {
         Arrays.fill(autoTiles, TileState.OPP_CLEAR);
 
         // Link it to the recycler view
-        attackView = findViewById(R.id.top_grid);
+        RecyclerView attackView = findViewById(R.id.top_grid);
         attackAdapter = new AttackRecyclerAdapter(this, autoTiles);
         // deleted : ", attackView.getHeight() / rows"
+        attackAdapter.setClickListener(this);
         attackView.setAdapter(attackAdapter);
         attackView.setLayoutManager(new GridLayoutManager(this, columns));
     }
@@ -290,5 +292,18 @@ public class GameActivity extends AppCompatActivity {
 
     public int getLastAutoTile() {
         return lastAutoTile;
+    }
+
+    @Override
+    public void onItemClick(int tile) {
+        lastPlayersTile = tile;
+        // Computer makes its own attempt.
+        attackAdapter.notifyDataSetChanged();
+        try {
+            auto.checkPlayersAttempt(tile);
+        } catch (TileException e) {
+            e.printStackTrace();
+        }
+        auto.makeAttempt();
     }
 }
