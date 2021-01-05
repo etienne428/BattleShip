@@ -15,6 +15,7 @@ import com.example.battleShip.MainActivity;
 import com.example.battleShip.R;
 import com.example.battleShip.gui.SetBoatsRecyclerAdapter;
 import com.example.battleShip.gui.ViewRecyclerAdapter;
+import com.example.battleShip.logic.TileStatus;
 import com.example.battleShip.utilis.TileException;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class SetBoatsActivity extends AppCompatActivity
     private int rows;
 
     // The list of Tiles, with their status
-    private TileState[] myTiles;
+    private TileStatus[] myTiles;
     // The position in the myTiles array
     private int position;
 
@@ -73,8 +74,8 @@ public class SetBoatsActivity extends AppCompatActivity
         rows = intent.getIntExtra(EXTRA_ROWS, 12);
 
         // Stores own grid
-        myTiles = new TileState[columns * rows];
-        Arrays.fill(myTiles, TileState.SEE_CLEAR);
+        myTiles = new TileStatus[columns * rows];
+        Arrays.fill(myTiles, new TileStatus(Boat.SEE, false));
 
         indexNextBoat = 0;
 
@@ -117,7 +118,7 @@ public class SetBoatsActivity extends AppCompatActivity
         for (int i = 0; i < boat.getLength(); i++) {
             try {
                 // if the Tile is already occupied, clear the board from this boat and stop
-                if (myTiles[position + i * gap] != TileState.SEE_CLEAR) {
+                if (myTiles[position + i * gap].getBoat() != Boat.SEE) {
                     clearBoat();
                     // Make sure the boat doesn't span on 2 lines
                 } else if (!northSouth && (position + i) % columns == 0
@@ -125,7 +126,7 @@ public class SetBoatsActivity extends AppCompatActivity
                     throw new ArrayIndexOutOfBoundsException();
                     // Set the tile as part of the boat
                 } else {
-                    myTiles[position + i * gap] = TileState.setClear(boat);
+                    myTiles[position + i * gap] = new TileStatus(boat, false);
                 }
                 // If boat is not entirely inside of the grid, shift the boat to fix that
             } catch (ArrayIndexOutOfBoundsException e) {
@@ -136,8 +137,6 @@ public class SetBoatsActivity extends AppCompatActivity
                 position = position - (gap * (boat.getLength() - i));
                 // recursively
                 showBoat();
-            } catch (TileException e) {
-                Log.e("BOAT", "Too many boats set : " + position);
             }
         }
         // Asks the view to update
@@ -178,7 +177,7 @@ public class SetBoatsActivity extends AppCompatActivity
         sb.append(".\n|");
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                sb.append(myTiles[j + (i * columns)].getCharacter()).append(" ");
+                sb.append(myTiles[j + (i * columns)].getChar()).append(" ");
             }
             sb.append("|\n|");
         }
@@ -210,7 +209,7 @@ public class SetBoatsActivity extends AppCompatActivity
      * @param position the coordinate of the clicked tile.
      */
     @Override
-    public void onItemClick(int position) {
+    public void onItemClick(View view, int position) {
         if (position != -1) {
             clearBoat();
         }
@@ -223,12 +222,8 @@ public class SetBoatsActivity extends AppCompatActivity
      */
     private void clearBoat() {
         for (int i = 0; i < myTiles.length; i++) {
-            try {
-                if (myTiles[i].getBoat() == Boat.values()[indexNextBoat]) {
-                    myTiles[i] = TileState.SEE_CLEAR;
-                }
-            } catch (TileException e) {
-                Log.e("BOAT", "clearBoat " + e.getMessage());
+            if (myTiles[i].getBoat() == Boat.values()[indexNextBoat]) {
+                myTiles[i] = new TileStatus(Boat.SEE, false);
             }
         }
     }

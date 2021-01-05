@@ -1,14 +1,11 @@
 
 package com.example.battleShip.gui;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.example.battleShip.logic.BSViewAdapter;
+import com.example.battleShip.logic.TileStatus;
 import com.example.battleShip.model.GameActivity;
-import com.example.battleShip.model.TileState;
-import com.example.battleShip.utilis.TileException;
 
 public class AttackRecyclerAdapter extends BSViewAdapter {
 
@@ -17,7 +14,7 @@ public class AttackRecyclerAdapter extends BSViewAdapter {
     /**
      * Data is passed into the constructor to be stored.
      */
-    public AttackRecyclerAdapter(GameActivity context, TileState[] tiles) {
+    public AttackRecyclerAdapter(GameActivity context, TileStatus[] tiles) {
         super(context, tiles);
         this.context = context;
     }
@@ -30,15 +27,8 @@ public class AttackRecyclerAdapter extends BSViewAdapter {
      */
     @Override
     public void onBindViewHolder(@NonNull AttackRecyclerAdapter.ViewHolder holder, int position) {
-        holder.myTextView.setText(String.valueOf(tiles[position].getCharacter()));
-        try {
-            if (position == context.getLastPlayersTile()) {
-                holder.myTextView.setBackgroundColor(tiles[position].getColorLast());
-            } else {
-                holder.myTextView.setBackgroundColor(tiles[position].getColor());
-            }
-        } catch (TileException e) {
-            Log.e("COLOR_ATT", "Problem by looking for color");
-        }
+        holder.myTextView.setText(String.valueOf(tiles[position].getChar()));
+        holder.myTextView.setBackgroundColor(tiles[position]
+                .getColor(position == context.getLastPlayersTile()));
     }
 }

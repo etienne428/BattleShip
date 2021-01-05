@@ -6,8 +6,7 @@ public enum Boat {
     DESTROYER(3),
     SUBMARINE(3),
     PATROL(2),
-    SEE(0),
-    MISSED(0);
+    SEE(0);
 
     private final int length;
 
@@ -17,5 +16,24 @@ public enum Boat {
 
     public int getLength() {
         return length;
+    }
+
+    public char getChar() {
+        switch (this) {
+            case CARRIER:
+                return 'C';
+            case BATTLESHIP:
+                return 'B';
+            case DESTROYER:
+                return 'D';
+            case SUBMARINE:
+                return 'S';
+            case PATROL:
+                return 'P';
+            case SEE:
+                return ' ';
+            default:
+                return 'O';
+        }
     }
 }

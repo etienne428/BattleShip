@@ -11,11 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.battleShip.R;
-import com.example.battleShip.gui.AttackRecyclerAdapter;
 import com.example.battleShip.model.Boat;
-import com.example.battleShip.model.GameActivity;
-import com.example.battleShip.model.TileState;
-import com.example.battleShip.utilis.TileException;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -24,13 +20,13 @@ public abstract class BSViewAdapter extends RecyclerView.Adapter<BSViewAdapter.V
 
     // Stores each boat, with the list of already touched tiles
     protected final HashMap<Boat, LinkedList<Integer>> setOfBoat = new HashMap<>();
-    protected final TileState[] tiles;
+    protected final TileStatus[] tiles;
     protected final LayoutInflater inflater;
     protected final Context context;
     protected ItemClickListener clickListener;
 
     // data is passed into the constructor
-    public BSViewAdapter(Context context, TileState[] tiles) {
+    public BSViewAdapter(Context context, TileStatus[] tiles) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.tiles = tiles;
@@ -45,9 +41,9 @@ public abstract class BSViewAdapter extends RecyclerView.Adapter<BSViewAdapter.V
     /**
      * Inflates the cell layout from xml when needed.
      *
-     * @param parent    the grid, as view.
-     * @param viewType  for the @Override
-     * @return          the viewHolder
+     * @param parent   the grid, as view.
+     * @param viewType for the @Override
+     * @return the viewHolder
      */
     @Override
     @NonNull
@@ -83,11 +79,12 @@ public abstract class BSViewAdapter extends RecyclerView.Adapter<BSViewAdapter.V
             super(itemView);
             myTextView = itemView.findViewById(R.id.tile);
             myTextView.setTextSize(14);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            if (clickListener != null) clickListener.onItemClick(getAdapterPosition());
+            if (clickListener != null) clickListener.onItemClick(view, getAdapterPosition());
         }
     }
 
@@ -100,11 +97,7 @@ public abstract class BSViewAdapter extends RecyclerView.Adapter<BSViewAdapter.V
     protected void setBoatDrowned(Boat attempt, LinkedList<Integer> reachedTiles) {
         for (Object position : reachedTiles) {
             int pos = (int) position;
-            try {
-                tiles[pos] = tiles[pos].setTouchedBoat(attempt);
-            } catch (TileException e) {
-                e.printStackTrace();
-            }
+            tiles[pos].setTargeted();
         }
         Log.i("PRINT_VIEW_RECYCLER", attempt.toString());
     }
@@ -119,7 +112,7 @@ public abstract class BSViewAdapter extends RecyclerView.Adapter<BSViewAdapter.V
         sb.append(".\n|");
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                sb.append(tiles[j + (i * columns)].getCharacter()).append(" ");
+                sb.append(tiles[j + (i * columns)].getChar()).append(" ");
             }
             sb.append("|\n|");
         }
@@ -134,6 +127,6 @@ public abstract class BSViewAdapter extends RecyclerView.Adapter<BSViewAdapter.V
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
-        void onItemClick(int position);
+        void onItemClick(View view, int position);
     }
 }

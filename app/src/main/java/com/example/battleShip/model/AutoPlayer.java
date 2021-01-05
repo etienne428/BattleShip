@@ -2,12 +2,12 @@ package com.example.battleShip.model;
 
 import android.util.Log;
 
+import com.example.battleShip.logic.TileStatus;
 import com.example.battleShip.utilis.BoatNotSetException;
 import com.example.battleShip.utilis.TileException;
 
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.Objects;
 import java.util.Random;
 
 public class AutoPlayer {
@@ -15,7 +15,7 @@ public class AutoPlayer {
     private final GameActivity game;
     private final int columns;
     private final int rows;
-    private TileState[] autoTiles;
+    private TileStatus[] autoTiles;
     private final Random random = new Random();
     private Boat lastBoat;
     private int lastTile = -1;
@@ -65,7 +65,7 @@ public class AutoPlayer {
      * @throws BoatNotSetException if a tile was occupied
      */
     private void setBoat(boolean northSouth, int shipLength, int shipIndex) throws BoatNotSetException {
-        TileState state;
+        TileStatus state;
         // Coordinate of the first tile
         int line;
         int column;
@@ -83,15 +83,11 @@ public class AutoPlayer {
         int tile = line * columns + column;
         // Check that tiles are free
         boatCanBeSet(tile, shipLength, northSouth);
-        try {
-            // The TileState for the new boat
-            state = TileState.getTile(10 * (shipIndex + 1));
-            // Fill the tiles
-            for (int j = 0; j < shipLength; j++) {
-                autoTiles[tile + (j * gap)] = state;
-            }
-        } catch (TileException e) {
-            Log.e("ERROR_BOAT", Objects.requireNonNull(e.getMessage()));
+        // The TileState for the new boat
+        state = new TileStatus(Boat.values()[shipIndex], false);
+        // Fill the tiles
+        for (int j = 0; j < shipLength; j++) {
+            autoTiles[tile + (j * gap)] = state;
         }
     }
 
@@ -122,7 +118,16 @@ public class AutoPlayer {
      * The computer's attempt.
      */
     public void makeAttempt() {
-        Log.i("BOAT_IS", "Boat is " + lastBoat
+        try {
+            do {
+                lastTile = random.nextInt(rows * columns);
+            } while (attempts.contains(lastTile));
+            // Make the attempt
+            game.checkComputerAttempt(lastTile);
+        } catch (TileException e) {
+            e.printStackTrace();
+        }
+/*        Log.i("BOAT_IS", "Boat is " + lastBoat
                 + ", direction = " + directionOfNextAttempt
                 + " and lastTile = " + lastTile);
         int lastTarget = lastTile;
@@ -209,7 +214,7 @@ public class AutoPlayer {
             e.printStackTrace();
             lastTile = lastTarget;
             makeAttempt();
-        }
+        }*/
     }
 
     /**
@@ -217,22 +222,10 @@ public class AutoPlayer {
      *
      * @param tile the targeted tile
      * @return the Boat reached (or Boat.SEE)
-     * @throws TileException if the tile was already targeted
      */
-    public Boat checkPlayersAttempt(int tile) throws TileException {
-        Boat attempt = autoTiles[tile].getBoat();
-
-        // Set default color to blue (no change)
-        try {
-            if (attempt != Boat.SEE) {
-                autoTiles[tile] = autoTiles[tile].setTouched();
-            } else {
-                autoTiles[tile] = autoTiles[tile].setMissed();
-            }
-        } catch (TileException e) {
-            Log.e("TILE_ERROR_AUTO", e.getMessage() + ", pos = " + tile);
-        }
-        return autoTiles[tile].getBoat();
+    public TileStatus checkPlayersAttempt(int tile) {
+        autoTiles[tile].setTargeted();
+        return autoTiles[tile];
     }
 
     /**
@@ -245,7 +238,7 @@ public class AutoPlayer {
         sb.append(".\n|");
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                sb.append(autoTiles[j + (i * columns)].getCharacter()).append(" ");
+                sb.append(autoTiles[j + (i * columns)].getChar()).append(" ");
             }
             sb.append("|\n|");
         }
@@ -257,8 +250,8 @@ public class AutoPlayer {
      * TODO: check if a Thread is efficient
      */
     public void run() {
-        autoTiles = new TileState[columns * rows];
-        Arrays.fill(autoTiles, TileState.SEE_CLEAR);
+        autoTiles = new TileStatus[columns * rows];
+        Arrays.fill(autoTiles, new TileStatus(Boat.SEE, false));
         setBoatOnDefault();
         printGrid();
     }
