@@ -1,8 +1,6 @@
 package com.example.battleShip.gui;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.battleShip.R;
-import com.example.battleShip.logic.BSViewAdapter;
 import com.example.battleShip.logic.TileStatus;
 import com.example.battleShip.model.Boat;
 import com.example.battleShip.model.SetBoatsActivity;
-import com.example.battleShip.model.TileState;
 
 import java.util.HashMap;
 import java.util.LinkedList;

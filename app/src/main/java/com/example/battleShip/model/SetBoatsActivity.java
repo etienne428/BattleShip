@@ -8,20 +8,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.battleShip.MainActivity;
 import com.example.battleShip.R;
 import com.example.battleShip.gui.SetBoatsRecyclerAdapter;
-import com.example.battleShip.gui.ViewRecyclerAdapter;
 import com.example.battleShip.logic.TileStatus;
-import com.example.battleShip.utilis.TileException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
 
 import static com.example.battleShip.MainActivity.EXTRA_COLUMNS;
 import static com.example.battleShip.MainActivity.EXTRA_ROWS;

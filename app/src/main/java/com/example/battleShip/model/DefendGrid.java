@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.battleShip.R;
-import com.example.battleShip.gui.ViewRecyclerAdapter;
 import com.example.battleShip.logic.GridInterface;
 import com.example.battleShip.logic.TileStatus;
 import com.example.battleShip.utilis.TileException;
