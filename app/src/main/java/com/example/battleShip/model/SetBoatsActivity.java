@@ -80,7 +80,7 @@ public class SetBoatsActivity extends AppCompatActivity
         setBoatView.setAdapter(setBoatAdapter);
         setBoatView.setLayoutManager(new GridLayoutManager(this, columns));
 
-        textView = findViewById(R.id.instructions_text);
+        textView = findViewById(R.id.instructions_text_set);
         updateText(false);
     }
 
@@ -115,6 +115,7 @@ public class SetBoatsActivity extends AppCompatActivity
                 // if the Tile is already occupied, clear the board from this boat and stop
                 if (myTiles[position + i * gap].getBoat() != Boat.SEE) {
                     clearBoat();
+                    break;
                     // Make sure the boat doesn't span on 2 lines
                 } else if (!northSouth && (position + i) % columns == 0
                         && (position) % columns != 0) {

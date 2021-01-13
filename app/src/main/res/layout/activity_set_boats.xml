@@ -56,26 +56,26 @@
 
             <Button
                 android:id="@+id/rotate_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="4dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:onClick="rotate"
                 android:text="@string/rotate"
                 android:textSize="16sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/set_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="4dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:onClick="setBoat"
                 android:text="@string/set_boat"
                 android:textSize="16sp" />
@@ -85,15 +85,16 @@
 
         <!-- Instructions -->
         <TextView
-            android:id="@+id/instructions_text"
+            android:id="@+id/instructions_text_set"
             android:layout_width="match_parent"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
             android:layout_weight="1"
-            android:layout_marginRight="16dp" />
+            android:textSize="24sp" />
 
     </LinearLayout>
 </LinearLayout>

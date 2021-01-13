@@ -46,7 +46,7 @@ public class GameActivity extends AppCompatActivity {
         setMyGrid(extra);
 
         // Find the view that gives info to the player
-        info = findViewById(R.id.instructions_text);
+        info = findViewById(R.id.instructions_text_game);
         writeInstruction(getString(R.string.welcome_text));
 
         // Instantiate the computer player and set its boats
