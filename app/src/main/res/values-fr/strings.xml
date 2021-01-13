@@ -9,8 +9,8 @@
     <string name="rotate">Changer la direction</string>
     <string name="set_boat">Confirmer</string>
     <string name="begin_a_new_game">Commencer une nouvelle partie</string>
-    <string name="set_boat_1">\"Le dernier bateau est un \"</string>
-    <string name="set_boat_2">\" et contient \"</string>
-    <string name="set_boat_3">\" portions de mer. Choisit son emplacement.\"</string>
-    <string name="set_boat_4">\"Le prochain bateau est un \"</string>
+    <string name="set_boat_1">Le dernier bateau est un \"</string>
+    <string name="set_boat_2">\" et contient </string>
+    <string name="set_boat_3"> portions de mer. Choisit son emplacement.</string>
+    <string name="set_boat_4">Le prochain bateau est un </string>
 </resources>

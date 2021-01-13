@@ -8,8 +8,8 @@
     <string name="rotate">Rotate</string>
     <string name="set_boat">Confirm</string>
     <string name="begin_a_new_game">Begin a new Game</string>
-    <string name="set_boat_1">\"The last boat is \"</string>
-    <string name="set_boat_2">\" and has \"</string>
-    <string name="set_boat_3">\" tiles. Choose where to put it.\"</string>
-    <string name="set_boat_4">\"Next boat is \"</string>
+    <string name="set_boat_1">The last boat is the \"</string>
+    <string name="set_boat_2">\" and has </string>
+    <string name="set_boat_3"> tiles. Choose where to put it.</string>
+    <string name="set_boat_4">Next boat is </string>
 </resources>
