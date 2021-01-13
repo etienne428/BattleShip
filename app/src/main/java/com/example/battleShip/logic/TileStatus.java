@@ -7,26 +7,28 @@ import com.example.battleShip.model.Boat;
 public class TileStatus {
     private boolean targeted = false;
     private Boat boat;
-    private final boolean opponent;
+    private final boolean opponentDefender;
 
     public TileStatus(Boat boat, boolean opponent) {
         this.boat = boat;
-        this.opponent = opponent;
+        this.opponentDefender = opponent;
     }
 
     public char getChar() {
-        if (!opponent) {
+        if (!opponentDefender) {
             if (targeted && boat == Boat.SEE) {
                 return 'O';
             } else {
                 return boat.getChar();
             }
-        } else if (!targeted) {
-            return ' ';
-        } else if (boat != Boat.SEE) {
-            return 'X';
         } else {
-            return 'O';
+            if (!targeted) {
+                return ' ';
+            } else if (boat != Boat.SEE) {
+                return 'X';
+            } else {
+                return 'O';
+            }
         }
     }
 

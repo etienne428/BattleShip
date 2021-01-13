@@ -42,8 +42,8 @@ public class GameActivity extends AppCompatActivity {
         Bundle extra = intent.getBundleExtra(MainActivity.EXTRA_SETUP);
 
         setEnemyGrid();
-        assert extra != null;
         setMyGrid(extra);
+        assert extra != null;
 
         // Find the view that gives info to the player
         info = findViewById(R.id.instructions_text_game);
@@ -62,6 +62,7 @@ public class GameActivity extends AppCompatActivity {
 
         ArrayList<Integer> boatSetUp = (ArrayList<Integer>) extra.getSerializable(MainActivity.EXTRA_SETUP);
         defendGrid.setBoats(boatSetUp);
+        defendGrid.notifyDataSetChanged();
     }
 
     private void setEnemyGrid() {

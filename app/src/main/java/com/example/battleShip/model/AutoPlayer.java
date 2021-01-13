@@ -124,6 +124,7 @@ public class AutoPlayer {
             } while (attempts.contains(lastTile));
             // Make the attempt
             game.checkComputerAttempt(lastTile);
+            attempts.add(lastTile);
         } catch (TileException e) {
             e.printStackTrace();
         }

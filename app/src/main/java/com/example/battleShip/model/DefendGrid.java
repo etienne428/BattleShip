@@ -45,7 +45,7 @@ public class DefendGrid extends RecyclerView.Adapter<DefendGrid.ViewHolder> impl
         this.inflater = LayoutInflater.from(game);
 
         tiles = new TileStatus[columns * rows];
-        Arrays.fill(tiles, new TileStatus(Boat.SEE, true));
+        Arrays.fill(tiles, new TileStatus(Boat.SEE, false));
 
         // instantiate a ll for each boat
         for (int i = 0; i < 5; i++) {
@@ -150,7 +150,7 @@ public class DefendGrid extends RecyclerView.Adapter<DefendGrid.ViewHolder> impl
     /**
      * Stores and recycles views as they are scrolled off screen
      */
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         // The view for one tile
         public TextView myTextView;
@@ -164,15 +164,6 @@ public class DefendGrid extends RecyclerView.Adapter<DefendGrid.ViewHolder> impl
             super(itemView);
             myTextView = itemView.findViewById(R.id.tile);
             myTextView.setTextSize(14);
-            myTextView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            if (clickListener != null) {
-                clickListener.onItemClick(view, getAdapterPosition());
-                onBindViewHolder(this, getAdapterPosition());
-            }
         }
     }
 
@@ -185,24 +176,16 @@ public class DefendGrid extends RecyclerView.Adapter<DefendGrid.ViewHolder> impl
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        char tile = tiles[position].getChar();
-        holder.myTextView.setText(String.valueOf(tile));
-        holder.myTextView.setBackgroundColor(tiles[position].getColor(position == lastTile));
+        if (position >= 0) {
+            char tile = tiles[position].getChar();
+            holder.myTextView.setText(String.valueOf(tile));
+            holder.myTextView.setBackgroundColor(tiles[position].getColor(position == lastTile));
+        }
     }
 
     @Override
     public int getItemCount() {
-        return 0;
-    }
-
-    // allows clicks events to be caught
-    void setClickListener(DefendGrid.ItemClickListener itemClickListener) {
-        this.clickListener = itemClickListener;
-    }
-
-    // parent activity will implement this method to respond to click events
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
+        return tiles.length;
     }
 }
 

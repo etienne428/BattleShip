@@ -10,19 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.battleShip.R;
-import com.example.battleShip.logic.GridInterface;
 import com.example.battleShip.logic.TileStatus;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class AttackGrid extends RecyclerView.Adapter<AttackGrid.ViewHolder> implements GridInterface, GridInterface.ItemClickListener {
+public class AttackGrid extends RecyclerView.Adapter<AttackGrid.ViewHolder> {
 
     protected final HashMap<Boat, LinkedList<Integer>> setOfBoat = new HashMap<>();
     protected final TileStatus[] tiles;
     protected final LayoutInflater inflater;
-    protected ItemClickListener clickListener;
     private final GameActivity game;
     private final int columns;
     private final int rows;
@@ -49,18 +47,15 @@ public class AttackGrid extends RecyclerView.Adapter<AttackGrid.ViewHolder> impl
         for (int i = 0; i < 5; i++) {
             setOfBoat.put(Boat.values()[i], new LinkedList<>());
         }
-        setClickListener(this);
     }
 
-    @Override
-    public void setBoatDrowned(Boat attempt, LinkedList<Integer> reachedTiles) {
+    public void setBoatDrowned(LinkedList<Integer> reachedTiles) {
         for (Object position : reachedTiles) {
             int pos = (int) position;
             tiles[pos].setTargeted();
         }
     }
 
-    @Override
     public void printGrid() {
         StringBuilder sb = new StringBuilder();
         sb.append(".\n|");
@@ -73,9 +68,14 @@ public class AttackGrid extends RecyclerView.Adapter<AttackGrid.ViewHolder> impl
         Log.i("PRINT_ATTACK_TILES", sb.toString());
     }
 
-    public void setClickListener(ItemClickListener itemClickListener) {
-        this.clickListener = itemClickListener;
-    }
+//    // parent activity will implement this method to respond to click events
+//    interface ItemClickListener {
+//        void onItemClick(View view, int position);
+//    }
+//
+//    public void setClickListener(ItemClickListener itemClickListener) {
+//        this.clickListener = itemClickListener;
+//    }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -91,14 +91,11 @@ public class AttackGrid extends RecyclerView.Adapter<AttackGrid.ViewHolder> impl
 
         @Override
         public void onClick(View view) {
-            if (clickListener != null) {
-                clickListener.onItemClick(view, getAdapterPosition());
-                onBindViewHolder(this, getAdapterPosition());
-            }
+            onItemClick(view, getAdapterPosition());
+//            onBindViewHolder(this, getAdapterPosition());
         }
     }
 
-    @Override
     public void onItemClick(View view, int position) {
         lastTile = position;
         // Computer makes its own attempt.
@@ -106,7 +103,7 @@ public class AttackGrid extends RecyclerView.Adapter<AttackGrid.ViewHolder> impl
         if (tiles[position].getBoat() != Boat.SEE) {
             checkBoatFloating(tiles[position].getBoat(), position);
         }
-        notifyDataSetChanged();
+//        notifyDataSetChanged();
         game.makeAttempt();
     }
 
@@ -121,7 +118,7 @@ public class AttackGrid extends RecyclerView.Adapter<AttackGrid.ViewHolder> impl
         // Check if boat is drown.
         // If yes, display the letter corresponding to the boat
         if (reachedTiles.size() == boat.getLength()) {
-            setBoatDrowned(boat, reachedTiles);
+            setBoatDrowned(reachedTiles);
             if (setOfBoat.isEmpty()) {
                 game.announceWinner();
             }
@@ -140,9 +137,11 @@ public class AttackGrid extends RecyclerView.Adapter<AttackGrid.ViewHolder> impl
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.myTextView.setText(String.valueOf(tiles[position].getChar()));
-        holder.myTextView.setBackgroundColor(tiles[position]
-                .getColor(position == lastTile));
+        if (position >= 0) {
+            holder.myTextView.setText(String.valueOf(tiles[position].getChar()));
+            holder.myTextView.setBackgroundColor(tiles[position]
+                    .getColor(position == lastTile));
+        }
     }
 
     @Override

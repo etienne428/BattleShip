@@ -1,5 +1,7 @@
 package com.example.battleShip.model;
 
+import android.util.Log;
+
 public enum Boat {
     CARRIER(5),
     BATTLESHIP(4),
@@ -33,6 +35,7 @@ public enum Boat {
             case SEE:
                 return ' ';
             default:
+                Log.e("BOAT", " getChar is weird...");
                 return 'O';
         }
     }
