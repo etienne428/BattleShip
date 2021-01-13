@@ -5,9 +5,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.battleShip.MainActivity;
@@ -38,6 +42,8 @@ public class SetBoatsActivity extends AppCompatActivity
 
     // Bottom right view to display instructions
     private TextView textView;
+    private Button confirm;
+
 
     // Next boat's index in Boat.values()
     private int indexNextBoat;
@@ -82,6 +88,12 @@ public class SetBoatsActivity extends AppCompatActivity
 
         textView = findViewById(R.id.instructions_text_set);
         updateText(false);
+        confirm = findViewById(R.id.set_button);
+//        Drawable background = confirm.getBackground();
+//        if (background instanceof ColorDrawable) {
+//            buttonColor = ((ColorDrawable) background).getColor();
+//        }
+        confirm.setBackgroundColor(Color.GRAY);
     }
 
     /**
@@ -143,6 +155,9 @@ public class SetBoatsActivity extends AppCompatActivity
      * When confirmed, stores the boat in the ArrayList to be passed to the GameActivity.
      */
     public void setBoat(View view) {
+        if (!containsBoat()) {
+            return;
+        }
         // Add the first tile's position
         boatSetUp.add(position);
         // Add the direction
@@ -158,9 +173,19 @@ public class SetBoatsActivity extends AppCompatActivity
         if (indexNextBoat < 5) {
             updateText(indexNextBoat == 4);
             position = -1;
+            confirm.setBackgroundColor(Color.GRAY);
         } else {
             closeActivity();
         }
+    }
+
+    private boolean containsBoat() {
+        for (TileStatus status : myTiles) {
+            if (status.getBoat() == Boat.values()[indexNextBoat]) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -211,6 +236,7 @@ public class SetBoatsActivity extends AppCompatActivity
         }
         this.position = position;
         showBoat();
+        confirm.setBackgroundColor(getResources().getColor(R.color.purple_500));
     }
 
     /**
