@@ -14,8 +14,8 @@ public class TileStatus {
         this.opponentDefender = opponent;
     }
 
-    public char getChar() {
-        if (!opponentDefender) {
+    public char getChar(boolean defend) {
+        if (defend) {
             if (targeted && boat == Boat.SEE) {
                 return 'O';
             } else {
@@ -72,7 +72,7 @@ public class TileStatus {
         return boat != Boat.SEE;
     }
 
-    public TileStatus setOpponent() {
-        return new TileStatus(boat, true);
+    public boolean isOpponentDefender() {
+        return opponentDefender;
     }
 }

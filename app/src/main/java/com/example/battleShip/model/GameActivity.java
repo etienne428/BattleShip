@@ -24,9 +24,6 @@ public class GameActivity extends AppCompatActivity {
     private AttackGrid attackGrid;
     private DefendGrid defendGrid;
 
-    private int lastPlayersTile;
-    private int lastAutoTile;
-
     private TextView info;
     private AutoPlayer auto;
 
@@ -42,8 +39,8 @@ public class GameActivity extends AppCompatActivity {
         Bundle extra = intent.getBundleExtra(MainActivity.EXTRA_SETUP);
 
         setEnemyGrid();
-        setMyGrid(extra);
         assert extra != null;
+        setMyGrid(extra);
 
         // Find the view that gives info to the player
         info = findViewById(R.id.instructions_text_game);
@@ -96,14 +93,6 @@ public class GameActivity extends AppCompatActivity {
 
     public void announceWinner() {
         Toast.makeText(this, "Congratulations, you Won!", Toast.LENGTH_LONG).show();
-    }
-
-    public int getLastPlayersTile() {
-        return lastPlayersTile;
-    }
-
-    public int getLastAutoTile() {
-        return lastAutoTile;
     }
 
     public void makeAttempt() {

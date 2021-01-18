@@ -24,6 +24,7 @@ public class AttackGrid extends RecyclerView.Adapter<AttackGrid.ViewHolder> {
     private final GameActivity game;
     private final int columns;
     private final int rows;
+    private boolean defender = false;
 
     private int lastTile = -1;
 
@@ -61,21 +62,12 @@ public class AttackGrid extends RecyclerView.Adapter<AttackGrid.ViewHolder> {
         sb.append(".\n|");
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                sb.append(tiles[j + (i * columns)].getChar()).append(" ");
+                sb.append(tiles[j + (i * columns)].getChar(defender)).append(" ");
             }
             sb.append("|\n|");
         }
         Log.i("PRINT_ATTACK_TILES", sb.toString());
     }
-
-//    // parent activity will implement this method to respond to click events
-//    interface ItemClickListener {
-//        void onItemClick(View view, int position);
-//    }
-//
-//    public void setClickListener(ItemClickListener itemClickListener) {
-//        this.clickListener = itemClickListener;
-//    }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -99,11 +91,11 @@ public class AttackGrid extends RecyclerView.Adapter<AttackGrid.ViewHolder> {
     public void onItemClick(View view, int position) {
         lastTile = position;
         // Computer makes its own attempt.
-        tiles[position] = game.checkPlayersAttempt(position).setOpponent();
+        tiles[position] = game.checkPlayersAttempt(position);
         if (tiles[position].getBoat() != Boat.SEE) {
             checkBoatFloating(tiles[position].getBoat(), position);
         }
-//        notifyDataSetChanged();
+        notifyDataSetChanged();
         game.makeAttempt();
     }
 
@@ -120,6 +112,10 @@ public class AttackGrid extends RecyclerView.Adapter<AttackGrid.ViewHolder> {
         if (reachedTiles.size() == boat.getLength()) {
             setBoatDrowned(reachedTiles);
             if (setOfBoat.isEmpty()) {
+                for (TileStatus tile: tiles) {
+                    defender = true;
+                    notifyDataSetChanged();
+                }
                 game.announceWinner();
             }
         } else {
@@ -138,7 +134,7 @@ public class AttackGrid extends RecyclerView.Adapter<AttackGrid.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if (position >= 0) {
-            holder.myTextView.setText(String.valueOf(tiles[position].getChar()));
+            holder.myTextView.setText(String.valueOf(tiles[position].getChar(defender)));
             holder.myTextView.setBackgroundColor(tiles[position]
                     .getColor(position == lastTile));
         }

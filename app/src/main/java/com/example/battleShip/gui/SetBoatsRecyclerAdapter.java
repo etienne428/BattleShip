@@ -47,7 +47,7 @@ public class SetBoatsRecyclerAdapter extends RecyclerView.Adapter<SetBoatsRecycl
     // binds the data to the TextView in each cell
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        char tile = myTiles[position].getChar();
+        char tile = myTiles[position].getChar(true);
         holder.myTextView.setText(String.valueOf(tile));
         if (tile == ' ') {
             holder.myTextView.setBackgroundColor(Color.BLUE);

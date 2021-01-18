@@ -198,7 +198,7 @@ public class SetBoatsActivity extends AppCompatActivity
         sb.append(".\n|");
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                sb.append(myTiles[j + (i * columns)].getChar()).append(" ");
+                sb.append(myTiles[j + (i * columns)].getChar(true)).append(" ");
             }
             sb.append("|\n|");
         }

@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.battleShip.R;
-import com.example.battleShip.logic.GridInterface;
 import com.example.battleShip.logic.TileStatus;
 import com.example.battleShip.utilis.TileException;
 
@@ -19,15 +18,16 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class DefendGrid extends RecyclerView.Adapter<DefendGrid.ViewHolder> implements GridInterface {
+public class DefendGrid extends RecyclerView.Adapter<DefendGrid.ViewHolder> {
 
     protected final HashMap<Boat, LinkedList<Integer>> setOfBoat = new HashMap<>();
     protected final TileStatus[] tiles;
     protected final LayoutInflater inflater;
     private final GameActivity game;
-    private ItemClickListener clickListener;
     private final int columns;
     private final int rows;
+
+    private boolean defender = true;
 
     private int lastTile = -1;
 
@@ -80,7 +80,7 @@ public class DefendGrid extends RecyclerView.Adapter<DefendGrid.ViewHolder> impl
      * @param shipIndex  the index of the boat in the Boat enum.
      */
     private void setBoat(int position, boolean northSouth, int shipLength,
-                 int shipIndex) {
+                         int shipIndex) {
         int gap = 1;
         if (northSouth) {
             gap *= columns;
@@ -94,21 +94,12 @@ public class DefendGrid extends RecyclerView.Adapter<DefendGrid.ViewHolder> impl
         }
     }
 
-    @Override
-    public void setBoatDrowned(Boat attempt, LinkedList<Integer> reachedTiles) {
-        for (Object position : reachedTiles) {
-            int pos = (int) position;
-            tiles[pos].setTargeted();
-        }
-    }
-
-    @Override
     public void printGrid() {
         StringBuilder sb = new StringBuilder();
         sb.append(".\n|");
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                sb.append(tiles[j + (i * columns)].getChar()).append(" ");
+                sb.append(tiles[j + (i * columns)].getChar(defender)).append(" ");
             }
             sb.append("|\n|");
         }
@@ -123,28 +114,6 @@ public class DefendGrid extends RecyclerView.Adapter<DefendGrid.ViewHolder> impl
         tiles[position].setTargeted();
         notifyDataSetChanged();
         return tiles[position].getBoat();
-    }
-
-    @Override
-    public void checkBoatFloating(Boat boat, int position) {
-        // Get the corresponding lL and add the new touched tile
-        LinkedList<Integer> reachedTiles = setOfBoat.remove(boat);
-        if (reachedTiles == null) {
-            Log.e("ERROR", "Boat " + boat.name()
-                    + " already removed!!!!!!!!!!");
-        }
-        reachedTiles.addLast(position);
-        // Check if boat is drown.
-        // If yes, display the letter corresponding to the boat
-        if (reachedTiles.size() == boat.getLength()) {
-            setBoatDrowned(boat, reachedTiles);
-            if (setOfBoat.isEmpty()) {
-                game.announceWinner();
-            }
-        } else {
-            // Put boat back, if boat still floating
-            setOfBoat.put(boat, reachedTiles);
-        }
     }
 
     /**
@@ -176,8 +145,26 @@ public class DefendGrid extends RecyclerView.Adapter<DefendGrid.ViewHolder> impl
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+//        char tile = tiles[position].getCharacter();
+//        holder.myTextView.setText(String.valueOf(tile));
+//        try {
+////            Log.i("COLOR2_VIEW", "From bind view : " + position + " = pos, color = " + myTiles[position].getColor());
+//            if (position == context.getLastAutoTile()) {
+////                Log.i("COLOR2_VIEW", "color is " + myTiles[position].getColorLast()
+////                        + " instead of " + myTiles[position].getColor());
+//                holder.myTextView.setBackgroundColor(tiles[position].getColorLast());
+//            } else {
+//                holder.myTextView.setBackgroundColor(tiles[position].getColor());
+//            }
+//        } catch (TileException e) {
+//            Log.e("COLOR_VIEW", "Problem by looking for color : BIND " + tiles[position].name());
+//        }
+
         if (position >= 0) {
-            char tile = tiles[position].getChar();
+            if (tiles[position].isOpponentDefender()) {
+                Log.e("TILESTATUS", "Is opponent...");
+            }
+            char tile = tiles[position].getChar(defender);
             holder.myTextView.setText(String.valueOf(tile));
             holder.myTextView.setBackgroundColor(tiles[position].getColor(position == lastTile));
         }

@@ -239,7 +239,7 @@ public class AutoPlayer {
         sb.append(".\n|");
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                sb.append(autoTiles[j + (i * columns)].getChar()).append(" ");
+                sb.append(autoTiles[j + (i * columns)].getChar(true)).append(" ");
             }
             sb.append("|\n|");
         }
