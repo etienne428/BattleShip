@@ -80,7 +80,6 @@ public class SetBoatsActivity extends AppCompatActivity
 
         RecyclerView setBoatView = findViewById(R.id.set_boats_grid);
         setBoatAdapter = new SetBoatsRecyclerAdapter(this, myTiles);
-        setBoatAdapter.setClickListener(this);
         setBoatView.setAdapter(setBoatAdapter);
         setBoatView.setLayoutManager(new GridLayoutManager(this, columns));
 
@@ -148,6 +147,9 @@ public class SetBoatsActivity extends AppCompatActivity
      * When confirmed, stores the boat in the ArrayList to be passed to the GameActivity.
      */
     public void setBoat(View view) {
+        if (position < 0) {
+            return;
+        }
         // Add the first tile's position
         boatSetUp.add(position);
         // Add the direction
@@ -211,6 +213,7 @@ public class SetBoatsActivity extends AppCompatActivity
      */
     @Override
     public void onItemClick(int position) {
+        Log.e("CLICK", "Click in onItemClick");
         if (position != -1) {
             clearBoat();
         }
