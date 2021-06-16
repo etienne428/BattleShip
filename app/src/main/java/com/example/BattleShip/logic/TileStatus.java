@@ -1,8 +1,8 @@
-package com.example.battleShip.logic;
+package com.example.BattleShip.logic;
 
 import android.graphics.Color;
 
-import com.example.battleShip.model.Boat;
+import com.example.BattleShip.model.Boat;
 
 public class TileStatus {
     private boolean targeted = false;

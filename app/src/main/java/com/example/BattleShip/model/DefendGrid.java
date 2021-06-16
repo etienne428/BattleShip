@@ -1,4 +1,4 @@
-package com.example.battleShip.model;
+package com.example.BattleShip.model;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,9 +9,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.battleShip.R;
-import com.example.battleShip.logic.TileStatus;
-import com.example.battleShip.utilis.TileException;
+import com.example.BattleShip.R;
+import com.example.BattleShip.logic.TileStatus;
+import com.example.BattleShip.utilis.TileException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
