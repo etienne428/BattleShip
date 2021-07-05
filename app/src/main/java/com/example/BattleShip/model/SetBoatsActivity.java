@@ -1,4 +1,4 @@
-package com.example.battleShip.model;
+package com.example.BattleShip.model;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -14,16 +14,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.battleShip.MainActivity;
-import com.example.battleShip.R;
-import com.example.battleShip.gui.SetBoatsRecyclerAdapter;
-import com.example.battleShip.logic.TileStatus;
+import com.example.BattleShip.MainActivity;
+import com.example.BattleShip.R;
+import com.example.BattleShip.gui.SetBoatsRecyclerAdapter;
+import com.example.BattleShip.logic.TileStatus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static com.example.battleShip.MainActivity.EXTRA_COLUMNS;
-import static com.example.battleShip.MainActivity.EXTRA_ROWS;
+import static com.example.BattleShip.MainActivity.EXTRA_COLUMNS;
+import static com.example.BattleShip.MainActivity.EXTRA_ROWS;
 
 public class SetBoatsActivity extends AppCompatActivity
         implements SetBoatsRecyclerAdapter.ItemClickListener {
@@ -55,7 +55,7 @@ public class SetBoatsActivity extends AppCompatActivity
      * Stores the information to be passed on to the next activity,
      * so it knows where the boats are.
      * 5 pairs of numbers where the first is the tile number and the second = 1
-     * if north-south, 2 if east-west
+     * if north-south, 0 if east-west
      */
     ArrayList<Integer> boatSetUp = new ArrayList<>();
 
@@ -179,9 +179,15 @@ public class SetBoatsActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Check that the boat has been set.
+     * This fix the potential bug that would occur if the player click
+     * the CONFIRM button before setting the boat.
+     */
     private boolean containsBoat() {
+        Boat boatValue = Boat.values()[indexNextBoat];
         for (TileStatus status : myTiles) {
-            if (status.getBoat() == Boat.values()[indexNextBoat]) {
+            if (status.getBoat() == boatValue) {
                 return true;
             }
         }
@@ -243,8 +249,9 @@ public class SetBoatsActivity extends AppCompatActivity
      * Clear the last (and not confirmed) boat of the board.
      */
     private void clearBoat() {
+        Boat boatValue = Boat.values()[indexNextBoat];
         for (int i = 0; i < myTiles.length; i++) {
-            if (myTiles[i].getBoat() == Boat.values()[indexNextBoat]) {
+            if (myTiles[i].getBoat() == boatValue) {
                 myTiles[i] = new TileStatus(Boat.SEE, false);
             }
         }

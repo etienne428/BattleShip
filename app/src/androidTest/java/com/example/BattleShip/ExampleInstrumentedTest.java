@@ -1,4 +1,4 @@
-package com.example.battleShip;
+package com.example.BattleShip;
 
 import android.content.Context;
 

@@ -1,10 +1,10 @@
-package com.example.battleShip.model;
+package com.example.BattleShip.model;
 
 import android.util.Log;
 
-import com.example.battleShip.logic.TileStatus;
-import com.example.battleShip.utilis.BoatNotSetException;
-import com.example.battleShip.utilis.TileException;
+import com.example.BattleShip.logic.TileStatus;
+import com.example.BattleShip.utilis.BoatNotSetException;
+import com.example.BattleShip.utilis.TileException;
 
 import java.util.Arrays;
 import java.util.LinkedList;

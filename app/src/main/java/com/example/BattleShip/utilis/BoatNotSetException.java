@@ -1,4 +1,4 @@
-package com.example.battleShip.utilis;
+package com.example.BattleShip.utilis;
 
 public class BoatNotSetException extends Exception {
     private String message;

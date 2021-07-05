@@ -1,4 +1,4 @@
-package com.example.battleShip.model;
+package com.example.BattleShip.model;
 
 import android.util.Log;
 

@@ -166,7 +166,8 @@ public class DefendGrid extends RecyclerView.Adapter<DefendGrid.ViewHolder> {
             }
             char tile = tiles[position].getChar(defender);
             holder.myTextView.setText(String.valueOf(tile));
-            holder.myTextView.setBackgroundColor(tiles[position].getColor(position == lastTile));
+            holder.myTextView.setBackgroundColor(tiles[position]
+                    .getColor(position == lastTile));
         }
     }
 

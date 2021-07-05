@@ -1,4 +1,4 @@
-package com.example.battleShip.model;
+package com.example.BattleShip.model;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -9,10 +9,10 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.battleShip.MainActivity;
-import com.example.battleShip.R;
-import com.example.battleShip.logic.TileStatus;
-import com.example.battleShip.utilis.TileException;
+import com.example.BattleShip.MainActivity;
+import com.example.BattleShip.R;
+import com.example.BattleShip.logic.TileStatus;
+import com.example.BattleShip.utilis.TileException;
 
 import java.util.ArrayList;
 
@@ -67,6 +67,7 @@ public class GameActivity extends AppCompatActivity {
         attackGrid = new AttackGrid(columns, rows, this);
         attackView.setAdapter(attackGrid);
         attackView.setLayoutManager(new GridLayoutManager(this, columns));
+        attackGrid.notifyDataSetChanged();
     }
 
 

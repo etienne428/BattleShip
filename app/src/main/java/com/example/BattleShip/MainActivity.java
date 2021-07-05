@@ -1,4 +1,4 @@
-package com.example.battleShip;
+package com.example.BattleShip;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -11,8 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.battleShip.model.GameActivity;
-import com.example.battleShip.model.SetBoatsActivity;
+import com.example.BattleShip.model.GameActivity;
+import com.example.BattleShip.model.SetBoatsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
